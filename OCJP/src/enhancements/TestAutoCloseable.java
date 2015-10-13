@@ -28,6 +28,7 @@ public class TestAutoCloseable implements AutoCloseable {
     }
 
     public static void main(String[] args) throws Exception {
+        System.out.println("Try with Resources");
         try (
                 TestAutoCloseable ac1 = new TestAutoCloseable("AC1");
                 TestAutoCloseable ac2 = new TestAutoCloseable("AC2")) {
