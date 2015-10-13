@@ -24,7 +24,7 @@ public class TestAutoCloseable implements AutoCloseable {
 
     public void close() {
         System.out.println("Closing: " + name);
-        throw new RuntimeException("ex in close: " + name);  // -> Add tp Suppressed Exception
+        throw new RuntimeException("ex in close: " + name);  // -> Add to Suppressed Exception
     }
 
     public static void main(String[] args) throws Exception {
