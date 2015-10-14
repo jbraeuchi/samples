@@ -40,12 +40,14 @@ public class Tests {
     public void testNormalize() throws IOException {
         Path p1 = Paths.get("c:\\temp\\.\\photos\\..\\readme.txt");
         Path p2 = Paths.get("c:/temp/readme.txt");
+        Path p3 = Paths.get("c:/../temp/../temp/./readme.txt"); // erstes .. ignoriert
 
         System.out.println("normalize 1: " + p1.normalize());
         System.out.println("normalize 2: " + p2.normalize());
+        System.out.println("normalize 3: " + p3.normalize());
 
-        System.out.println("equals: " + p1.equals(p2));
-        System.out.println("equals: " + p1.normalize().equals(p2.normalize()));
+        System.out.println("equals: " + p1.equals(p2)); // false
+        System.out.println("equals: " + p1.normalize().equals(p2.normalize()));  // true
 
 //      System.out.println("same: " + Files.isSameFile(p1, p2));
 //      System.out.println("same: " + Files.isSameFile(p1.normalize(), p2.normalize()));
@@ -86,7 +88,15 @@ public class Tests {
 
         System.out.println("relativize 1: " + p1.relativize(p2));
         System.out.println("relativize 2: " + p2.relativize(p1));
+    }
 
+    @Test
+    public void testRelativize1() {
+        Path p1 = Paths.get("c:/test/sub/test.txt");
+        Path p2 = Paths.get("c:/temp/test.txt");
+
+        System.out.println("relativize 1: " + p1.relativize(p2));
+        System.out.println("relativize 2: " + p2.relativize(p1));
     }
 
     @Test
