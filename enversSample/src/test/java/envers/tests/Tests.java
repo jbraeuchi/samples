@@ -78,7 +78,7 @@ public class Tests {
 
         // Mr. Bond reist weiter, Mr. Holmes wird erfasst, IBM wird erfasst
         EnvPerson p2 = em.find(EnvPerson.class, id);
-        p2.setAdresse("Somewhere in the the Fijis");
+        p2.setAdresse("Somewhere in the Fijis");
         
         EnvPerson px = new EnvPerson();        
         px.setName("Holmes");
