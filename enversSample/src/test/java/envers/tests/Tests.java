@@ -36,7 +36,7 @@ public class Tests {
 
         // Mr. Bond reist weiter
         EnvPerson p2 = em.find(EnvPerson.class, id);
-        p2.setAdresse("Somewhere in the the Fijis");
+        p2.setAdresse("Somewhere in the Fijis");
         
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
