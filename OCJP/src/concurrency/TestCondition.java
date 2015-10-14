@@ -17,20 +17,20 @@ public class TestCondition {
     final Condition notEmpty = lock.newCondition();
 
     final Object[] items = new Object[100];
-    int putptr, takeptr, count;
+    int putptr, takeptr, size;
 
     public void put(Object x) throws InterruptedException {
         count_put.incrementAndGet();
 
         lock.lock();
         try {
-            while (count == items.length)
+            while (size == items.length)
                 notFull.await();
             items[putptr] = x;
             if (++putptr == items.length) {
                 putptr = 0;
             }
-            ++count;
+            ++size;
             notEmpty.signal();
         } finally {
             lock.unlock();
@@ -42,13 +42,13 @@ public class TestCondition {
 
         lock.lock();
         try {
-            while (count == 0)
+            while (size == 0)
                 notEmpty.await();
             Object x = items[takeptr];
             if (++takeptr == items.length) {
                 takeptr = 0;
             }
-            --count;
+            --size;
             notFull.signal();
             return x;
         } finally {
@@ -66,7 +66,7 @@ public class TestCondition {
                     while (true) {
                         tc.put(new Object());
                         sleep(100);
-                        System.out.println(tc.count);
+                        System.out.println(tc.size);
                     }
                 } catch (InterruptedException e) {
                 }
@@ -82,7 +82,7 @@ public class TestCondition {
                     while (true) {
                         tc.take();
                         sleep(110);
-                        System.out.println(tc.count);
+                        System.out.println(tc.size);
                     }
                 } catch (InterruptedException e) {
                 }
