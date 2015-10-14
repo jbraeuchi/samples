@@ -78,7 +78,7 @@ public class Tests {
         rs.setCommand("select * from env_person");
         rs.execute();
 
-        Filter f = new Filter("me");
+        Filter f = new Filter("on");
         rs.setFilter(f);
 
         int cols = rs.getMetaData().getColumnCount();
