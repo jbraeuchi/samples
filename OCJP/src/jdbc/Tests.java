@@ -2,6 +2,7 @@ package jdbc;
 
 import org.junit.Test;
 
+import javax.sql.RowSet;
 import javax.sql.rowset.*;
 import java.sql.*;
 
@@ -12,8 +13,7 @@ public class Tests {
 
     @Test
     public void testConnection() {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", ""))
-        {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "")) {
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery("select * from env_person");
 
@@ -68,6 +68,29 @@ public class Tests {
     }
 
     @Test
+    public void testFilterRowSet() throws Exception {
+        RowSetFactory rsf = RowSetProvider.newFactory();
+        FilteredRowSet rs = rsf.createFilteredRowSet();
+        rs.setUrl("jdbc:mysql://localhost:3306/test");
+        rs.setUsername("root");
+        rs.setPassword("");
+
+        rs.setCommand("select * from env_person");
+        rs.execute();
+
+        Filter f = new Filter("me");
+        rs.setFilter(f);
+
+        int cols = rs.getMetaData().getColumnCount();
+        while (rs.next()) {
+            for (int i = 1; i <= cols; i++) {
+                System.out.print(rs.getObject(i) + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
     public void testJoinRowSet() throws Exception {
         RowSetFactory rsf = RowSetProvider.newFactory();
         CachedRowSet rs1 = rsf.createCachedRowSet();
@@ -96,5 +119,44 @@ public class Tests {
             System.out.println();
         }
 
+    }
+
+    // Sucht den Filter-String in allen Spalten
+    private class Filter implements Predicate {
+        private String filter;
+
+        public Filter(String filter) {
+            this.filter = filter;
+        }
+
+        @Override
+        public boolean evaluate(RowSet rs) {
+            System.out.println("evaluate Rs");
+
+            try {
+                int cols = rs.getMetaData().getColumnCount();
+                for (int i = 1; i <= cols; i++) {
+                    if (rs.getString(i).contains(filter)) {
+                        System.out.println("found in column: " + i);
+                        return true;
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        public boolean evaluate(Object value, int column) throws SQLException {
+            System.out.println("evaluate col num");
+            return false;
+        }
+
+        @Override
+        public boolean evaluate(Object value, String columnName) throws SQLException {
+            System.out.println("evaluate col name");
+            return false;
+        }
     }
 }
