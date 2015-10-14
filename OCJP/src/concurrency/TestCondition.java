@@ -24,8 +24,9 @@ public class TestCondition {
 
         lock.lock();
         try {
-            while (size == items.length)
+            while (size == items.length) {
                 notFull.await();
+            }
             items[putptr] = x;
             if (++putptr == items.length) {
                 putptr = 0;
@@ -42,8 +43,9 @@ public class TestCondition {
 
         lock.lock();
         try {
-            while (size == 0)
+            while (size == 0) {
                 notEmpty.await();
+            }
             Object x = items[takeptr];
             if (++takeptr == items.length) {
                 takeptr = 0;
