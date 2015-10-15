@@ -13,7 +13,7 @@ public class Tests {
 
     @Test
     public void testConnection() {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test")) {
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery("select * from env_person");
 
@@ -28,6 +28,31 @@ public class Tests {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+//    CREATE PROCEDURE `my_sqrt`(input_number INT, OUT out_number FLOAT)
+//    BEGIN
+//    SET out_number=SQRT(input_number);
+//    END
+    public void testCallableStatement() {
+        String myProc = "{call my_sqrt(?,?)}";
+
+        // add noAccessToProcedureBodies=true
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?noAccessToProcedureBodies=true", "test", "test")) {
+            CallableStatement stmt = con.prepareCall(myProc);
+            stmt.registerOutParameter(2, Types.FLOAT);
+
+            stmt.setFloat(1, 2.0f);
+            stmt.execute();
+
+            float result = stmt.getFloat(2);
+
+            System.out.println("Result: " + result);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -57,8 +82,8 @@ public class Tests {
         RowSetFactory rsf = RowSetProvider.newFactory();
         WebRowSet rs = rsf.createWebRowSet();
         rs.setUrl("jdbc:mysql://localhost:3306/test");
-        rs.setUsername("root");
-        rs.setPassword("");
+        rs.setUsername("test");
+        rs.setPassword("test");
 
         rs.setCommand("select * from env_person");
         rs.execute();
@@ -72,8 +97,8 @@ public class Tests {
         RowSetFactory rsf = RowSetProvider.newFactory();
         FilteredRowSet rs = rsf.createFilteredRowSet();
         rs.setUrl("jdbc:mysql://localhost:3306/test");
-        rs.setUsername("root");
-        rs.setPassword("");
+        rs.setUsername("test");
+        rs.setPassword("test");
 
         rs.setCommand("select * from env_person");
         rs.execute();
@@ -95,15 +120,15 @@ public class Tests {
         RowSetFactory rsf = RowSetProvider.newFactory();
         CachedRowSet rs1 = rsf.createCachedRowSet();
         rs1.setUrl("jdbc:mysql://localhost:3306/test");
-        rs1.setUsername("root");
-        rs1.setPassword("");
+        rs1.setUsername("test");
+        rs1.setPassword("test");
         rs1.setCommand("select * from env_person");
         rs1.execute();
 
         CachedRowSet rs2 = rsf.createCachedRowSet();
         rs2.setUrl("jdbc:mysql://localhost:3306/test");
-        rs2.setUsername("root");
-        rs2.setPassword("");
+        rs2.setUsername("test");
+        rs2.setPassword("test");
         rs2.setCommand("select id, rev, revtype from env_person_aud");
         rs2.execute();
 
