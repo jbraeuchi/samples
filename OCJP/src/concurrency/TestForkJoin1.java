@@ -1,5 +1,6 @@
 package concurrency;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 /**
@@ -42,7 +43,11 @@ public class TestForkJoin1 extends RecursiveTask<Integer> {
         TestForkJoin1 f = new TestForkJoin1(from, to);
 
         long t1 = System.currentTimeMillis();
-        Integer res = f.compute();
+//        Integer res = f.compute();
+// über ForkJoinPook
+        ForkJoinPool fjp = new ForkJoinPool();
+        Integer res = fjp.invoke(f);
+
         long t2 = System.currentTimeMillis();
 
         String str = String.format("TestForkJoin1 %d, %d: %d, time: %d ms", from, to, res, (t2 - t1));
