@@ -10,13 +10,20 @@ import java.nio.file.*;
 public class TestOpenOptions {
     public static void main(String args[]) throws Exception
     {
+        // will NOT overwrite existing contents
         OpenOption[] opts1 = new OpenOption[]{StandardOpenOption.CREATE};
-        OpenOption[] opts2 = new OpenOption[]{StandardOpenOption.CREATE_NEW}; //  java.nio.file.FileAlreadyExistsException
 
-        OpenOption[] opts3 = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.READ}; // java.lang.IllegalArgumentException: READ not allowed
+        //  java.nio.file.FileAlreadyExistsException if file exists
+        OpenOption[] opts2 = new OpenOption[]{StandardOpenOption.CREATE_NEW};
+
+        // java.lang.IllegalArgumentException: READ not allowed
+        OpenOption[] opts3 = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.READ};
+
+        // will overwrite existing contents
+        OpenOption[] opts4 = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
 
         Path writeFile = Paths.get("c:\\temp\\test.txt");
-        BufferedWriter br = Files.newBufferedWriter(writeFile, Charset.forName("UTF-8"),opts2);
+        BufferedWriter br = Files.newBufferedWriter(writeFile, Charset.forName("UTF-8"),opts4);
         br.write("This text file is created using Path API 1");
         br.flush();
         br.close();
