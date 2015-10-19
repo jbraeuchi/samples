@@ -57,13 +57,19 @@ public class Tests {
 //    BEGIN
 //    SET out_number=SQRT(input_number);
 //    END
+//
+//
+//    GRANT SELECT ON `mysql`.`proc` TO 'test'@'localhost';
     public void testCallableStatement() {
         String myProc = "{call my_sqrt(?,?)}";
+        String connect1 = "jdbc:mysql://localhost:3306/test";
+        String connect2 = "jdbc:mysql://localhost:3306/test?noAccessToProcedureBodies=true";
 
         // add noAccessToProcedureBodies=true
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?noAccessToProcedureBodies=true", "test", "test")) {
+        try (Connection con = DriverManager.getConnection(connect1, "test", "test")) {
             CallableStatement stmt = con.prepareCall(myProc);
             stmt.registerOutParameter(2, Types.FLOAT);
+//            stmt.registerOutParameter("out_number", Types.FLOAT);  // funkioniert nicht wenn noAccessToProcedureBodies=true
 
             stmt.setFloat(1, 2.0f);
             boolean b = stmt.execute();   // true if first result is a ResultSet
