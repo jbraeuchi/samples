@@ -13,7 +13,7 @@ public class TestOpenOptions {
         // will NOT overwrite existing contents
         OpenOption[] opts1 = new OpenOption[]{StandardOpenOption.CREATE};
 
-        //  java.nio.file.FileAlreadyExistsException if file exists
+        // java.nio.file.FileAlreadyExistsException if file exists
         OpenOption[] opts2 = new OpenOption[]{StandardOpenOption.CREATE_NEW};
 
         // java.lang.IllegalArgumentException: READ not allowed

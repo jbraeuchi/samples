@@ -27,7 +27,29 @@ public class Tests {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testResultset() {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test")) {
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // anstatt executeQuery
+            boolean b = stmt.execute("select * from env_person");  // true if first result is a ResultSet
+
+            if (b) {
+                ResultSet rs = stmt.getResultSet();
+                int cols = rs.getMetaData().getColumnCount();
+                while (rs.next()) {
+                    for (int i = 1; i <= cols; i++) {
+                        System.out.print(rs.getObject(i) + "\t");
+                    }
+                    System.out.println();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -44,11 +66,10 @@ public class Tests {
             stmt.registerOutParameter(2, Types.FLOAT);
 
             stmt.setFloat(1, 2.0f);
-            stmt.execute();
-
+            boolean b = stmt.execute();   // true if first result is a ResultSet
             float result = stmt.getFloat(2);
 
-            System.out.println("Result: " + result);
+            System.out.println("Result: " + result + " " + b);
 
         } catch (SQLException e) {
             e.printStackTrace();
