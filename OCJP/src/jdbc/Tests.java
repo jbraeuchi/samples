@@ -74,6 +74,7 @@ public class Tests {
             stmt.setFloat(1, 2.0f);
             boolean b = stmt.execute();   // true if first result is a ResultSet
             float result = stmt.getFloat(2);
+//            float result = stmt.getFloat("out_number");
 
             System.out.println("Result: " + result + " " + b);
 
