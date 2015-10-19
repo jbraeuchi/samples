@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6039e8ab-53f4-4a63-a046-49f0b64ae629" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/nio2/TestOpenOptions.java" afterPath="$PROJECT_DIR$/src/nio2/TestOpenOptions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/jdbc/Tests.java" afterPath="$PROJECT_DIR$/src/jdbc/Tests.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="OCJP.iws" />
@@ -726,7 +724,13 @@
       <option name="project" value="LOCAL" />
       <updated>1445184315807</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="test">
+      <created>1445271118833</created>
+      <option name="number" value="00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1445271118833</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
