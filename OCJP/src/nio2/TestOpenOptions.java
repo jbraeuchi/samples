@@ -22,10 +22,19 @@ public class TestOpenOptions {
         // will overwrite existing contents
         OpenOption[] opts4 = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
 
+        // will delete on close
+        OpenOption[] opts5 = new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE};
+
         Path writeFile = Paths.get("c:\\temp\\test.txt");
         BufferedWriter br = Files.newBufferedWriter(writeFile, Charset.forName("UTF-8"),opts4);
         br.write("This text file is created using Path API 1");
         br.flush();
         br.close();
+
+        Path deleteFile = Paths.get("c:\\temp\\delete.txt");
+        BufferedWriter br2 = Files.newBufferedWriter(deleteFile, Charset.forName("UTF-8"),opts5);
+        br2.write("File will be deleted when closed");
+        br2.flush();
+        br2.close();
     }
 }

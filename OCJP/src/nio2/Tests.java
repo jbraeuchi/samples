@@ -113,7 +113,7 @@ public class Tests {
         Path p1 = Paths.get("c:\\personal\\.\\photos\\..\\readme.txt");
         Path p2 = Paths.get("d:\\personal\\index.html");
         Path p3 = p1.relativize(p2);
-        System.out.println("relativize 1: " + p3);
+        System.out.println("relativize 1: " + p3);   // IllegalArgumentException: 'other' has different root
     }
 
     @Test
