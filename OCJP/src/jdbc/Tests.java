@@ -5,6 +5,7 @@ import org.junit.Test;
 import javax.sql.RowSet;
 import javax.sql.rowset.*;
 import java.sql.*;
+import java.util.Collection;
 
 /**
  * Created by jakob on 06.10.2015.
@@ -84,12 +85,40 @@ public class Tests {
     }
 
     @Test
+    public void testRowset() {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test")) {
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet resultSet = stmt.executeQuery("select * from env_person");
+
+            // populate Rowset with Resultset
+            CachedRowSet rs = RowSetProvider.newFactory().createCachedRowSet();
+            rs.populate(resultSet);
+
+            // Spalte "name" lesen
+            Collection<?> names = rs.toCollection("name");
+            for (Object name : names) {
+                System.out.println(name);
+            }
+
+            int cols = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i <= cols; i++) {
+                    System.out.print(rs.getObject(i) + "\t");
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testJdbcRowSet() throws Exception {
         RowSetFactory rsf = RowSetProvider.newFactory();
         JdbcRowSet rs = rsf.createJdbcRowSet();
         rs.setUrl("jdbc:mysql://localhost:3306/test");
-        rs.setUsername("root");
-        rs.setPassword("");
+        rs.setUsername("test");
+        rs.setPassword("test");
 
         rs.setCommand("select * from env_person");
         rs.execute();
