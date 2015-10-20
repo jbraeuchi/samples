@@ -4,14 +4,12 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.DosFileAttributes;
+import java.util.Iterator;
 
 /**
  * Created by jakob on 05.10.2015.
@@ -56,7 +54,7 @@ public class Tests {
     @Test
     public void testRoots1() {
         Iterable<Path> roots = FileSystems.getDefault().getRootDirectories();
-        System.out.println("FileSystem");
+        System.out.println("FileSystem.getRootDirectories");
         for (Path r : roots) {
             System.out.println(r);
         }
@@ -64,10 +62,25 @@ public class Tests {
 
     @Test
     public void testRoots2() {
-        File[] roots = File.listRoots();
-        System.out.println("File");
+        File[] roots = File.listRoots();   // nicht Files !
+        System.out.println("File.listRoots");
         for (File r : roots) {
             System.out.println(r);
+        }
+    }
+
+    @Test
+    public void testDirectoryStream() {
+        Path p1 = Paths.get("c:/temp");
+
+        // prefix glob: nicht notwendig
+        try (DirectoryStream<Path> ds = Files.newDirectoryStream(p1, "*.*")) {
+            Iterator<Path> it = ds.iterator();
+            while (it.hasNext()) {
+                System.out.println(it.next());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -145,8 +158,11 @@ public class Tests {
             Files.createFile(p1);
             Files.setAttribute(p1, "dos:hidden", true);
 
-            DosFileAttributeView fav = Files.getFileAttributeView(p1, DosFileAttributeView.class);
-            DosFileAttributes attrs = fav.readAttributes();
+            DosFileAttributes attrs = Files.readAttributes(p1, DosFileAttributes.class);
+            // oder lesen über FileAtttributesView
+//            DosFileAttributeView fav = Files.getFileAttributeView(p1, DosFileAttributeView.class);
+//            DosFileAttributes attrs = fav.readAttributes();
+
             System.out.println(attrs.creationTime());
             System.out.println(Files.isWritable(p1));
             System.out.println(attrs.isHidden());
