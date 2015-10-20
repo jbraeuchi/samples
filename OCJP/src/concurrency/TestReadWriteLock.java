@@ -57,6 +57,14 @@ public class TestReadWriteLock {
                 }
             }.start();
         }
+
+        try {
+            Thread.sleep(10_000L);
+            System.out.println("Exiting");
+            System.exit(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
