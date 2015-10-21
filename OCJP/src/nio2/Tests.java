@@ -29,7 +29,7 @@ public class Tests {
     public void testSubpath() {
         Path p1 = Paths.get("c:/temp/sub/test.txt");
 
-//        System.out.println("subpath 0, 0: " + p1.subpath(0, 0));
+//        System.out.println("subpath 0, 0: " + p1.subpath(0, 0));  // -> IllegalArgumentException
         System.out.println("subpath 0, 1: " + p1.subpath(0, 1));
         System.out.println("subpath 0, 2: " + p1.subpath(0, 2));
     }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
 
 /**
- * Zahlen im Array verdoppeln
+ * Zahlen im Array verdoppeln, invokeAll
  */
 public class TestForkJoin2 extends RecursiveAction {
 
