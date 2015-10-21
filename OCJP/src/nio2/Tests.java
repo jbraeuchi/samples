@@ -138,6 +138,8 @@ public class Tests {
 
             BasicFileAttributeView fav = Files.getFileAttributeView(p1, BasicFileAttributeView.class);
             BasicFileAttributes attrs = fav.readAttributes();
+            // oder direkt readAttributes
+//            BasicFileAttributes attrs = Files.readAttributes(p1, BasicFileAttributes.class);
             System.out.println(attrs.creationTime());
             System.out.println(Files.isWritable(p1));
 
