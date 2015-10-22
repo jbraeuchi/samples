@@ -9,6 +9,9 @@ import javax.persistence.Persistence;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.query.criteria.internal.IlikeAuditExpression;
+import org.hibernate.envers.query.internal.property.EntityPropertyName;
 import org.junit.Test;
 
 import envers.entities.EnvCompany;
@@ -103,7 +106,13 @@ public class Tests {
 
         List<Object> entities2 = ar.getCrossTypeRevisionChangesReader().findEntities(revisions.get(1));
         System.out.println("*** REV2: " + entities2);
-        
+
+        // Liest ein Revision mit bestimmter Adresse
+        AuditQuery aq = ar.createQuery().forEntitiesAtRevision(EnvPerson.class, revisions.get(1));
+        aq.add(new IlikeAuditExpression(new EntityPropertyName("adresse"), "%London%"));
+        List<EnvPerson> res = aq.getResultList();
+        System.out.println(res);
+
         em.close();
     }
 }
