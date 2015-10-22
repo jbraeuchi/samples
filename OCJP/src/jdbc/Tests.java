@@ -12,6 +12,9 @@ import java.util.Collection;
  */
 public class Tests {
 
+//    insert into env_person (id, vorname, name, adresse) values (1, 'James', 'Bond', 'Somewhere in the Bahames');
+//    insert into env_person (id, vorname, name, adresse) values (2, 'Sherlock', 'Holmes', 'Bakerstreet London');
+
     @Test
     public void testConnection() {
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test")) {
@@ -200,9 +203,26 @@ public class Tests {
             }
             System.out.println();
         }
-
     }
 
+    @Test
+    public void testUpdate() {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "test", "test")) {
+//            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from env_person");
+
+            int cols = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                String orginame = rs.getString("name");
+                rs.updateString("name", orginame + "-update");
+                rs.updateRow();
+             }
+        } catch (SQLException e) {
+            System.out.println("SQLException");
+            e.printStackTrace();
+        }
+    }
     // Sucht den Filter-String in allen Spalten
     private class Filter implements Predicate {
         private String filter;
