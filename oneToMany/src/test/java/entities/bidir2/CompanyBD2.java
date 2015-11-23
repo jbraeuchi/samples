@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * OneToMany with mappedBy bidirectiional
+ * Multiple OneToMany with mappedBy bidirectional
  */
 @Entity
 @Audited

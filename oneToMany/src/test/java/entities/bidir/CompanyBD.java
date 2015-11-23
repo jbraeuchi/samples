@@ -16,7 +16,7 @@ import javax.persistence.Version;
 import org.hibernate.envers.Audited;
 
 /**
- * OneToMany with mappedBy bidirectiional
+ * OneToMany with mappedBy bidirectional
  */
 @Entity
 @Audited

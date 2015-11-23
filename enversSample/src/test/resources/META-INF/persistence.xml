@@ -27,8 +27,8 @@
 			<!-- Tracken aller Changes einer Revision -->
 			<property name="org.hibernate.envers.track_entities_changed_in_revision" value="true" />
 
-			<property name="javax.persistence.schema-generation.database.action"
-				value="drop-and-create" />
+			<!--property name="javax.persistence.schema-generation.database.action"
+				value="drop-and-create" /-->
 		</properties>
 
 	</persistence-unit>
