@@ -8,6 +8,8 @@ import entities.bidir3.CompanyBD3;
 import entities.bidir3.EmployeeBD3;
 import entities.embed.CompanyEB;
 import entities.embed.EmployeeEB;
+import entities.embed2.CompanyEB2;
+import entities.embed2.EmployeeEB2;
 import entities.unidir.CompanyUD;
 import entities.unidir.EmployeeUD;
 import org.junit.Assert;
@@ -123,6 +125,42 @@ public class Tests {
         Assert.assertEquals(1, companies.size());
         Assert.assertEquals(3, cmp.getEmployees().size());
         Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+    }
+
+    @Test
+    public void testEmbed2() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST_O2M");
+        EntityManager em = emf.createEntityManager();
+
+        CompanyEB2 company = new CompanyEB2();
+        company.setName("IBM");
+
+        EmployeeEB2 emp1 = new EmployeeEB2();
+        emp1.setName("Employee 1");
+        company.getEmployees().add(emp1);
+
+        EmployeeEB2 emp2 = new EmployeeEB2();
+        emp2.setName("Employee 2");
+        company.getEmployees().add(emp2);
+
+        EmployeeEB2 manager = new EmployeeEB2();
+        manager.setName("Manager 1");
+        company.getManagers().add(manager);
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(company);
+        tx.commit();
+        em.close();
+
+        em = emf.createEntityManager();
+        TypedQuery<CompanyEB2> qp = em.createQuery("select c from CompanyEB2 c", CompanyEB2.class);
+        List<CompanyEB2> companies = qp.getResultList();
+        CompanyEB2 cmp = companies.get(0);
+
+        Assert.assertEquals(1, companies.size());
+        Assert.assertEquals(2, cmp.getEmployees().size());
+        Assert.assertEquals(1, cmp.getManagers().size());
     }
 
     @Test
