@@ -1,36 +1,37 @@
-
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	version="1.0">
+             version="1.0">
 
-	<persistence-unit name="TEST" transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <persistence-unit name="TEST" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<!-- All persistence classes must be listed -->
-		<class>envers.entities.EnvPerson</class>
-		<class>envers.entities.EnvCompany</class>
-		<class>envers.audit.RevisionInfo</class>
+        <!-- All persistence classes must be listed -->
+        <class>envers.entities.EnvPerson</class>
+        <class>envers.entities.EnvCompany</class>
+        <class>envers.entities.EnvParent</class>
+        <class>envers.entities.EnvChild</class>
+        <class>envers.audit.RevisionInfo</class>
 
-		<properties>
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/test" />
-			<property name="hibernate.connection.username" value="test" />
-			<property name="hibernate.connection.password" value="test" />
-				
-			<property name="hibernate.archive.autodetection" value="class" />
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/test"/>
+            <property name="hibernate.connection.username" value="test"/>
+            <property name="hibernate.connection.password" value="test"/>
 
-			<!-- Listener zum Abfüllen der RevisionEntity -->
-			<property name="org.hibernate.envers.revision_listener" value="envers.audit.RevisionInfoListener"/>
+            <property name="hibernate.archive.autodetection" value="class"/>
 
-			<!-- Tracken der Aenderungen auf Attribut -->
-			<!-- property name="org.hibernate.envers.global_with_modified_flag" value="true" / -->
+            <!-- Listener zum Abfüllen der RevisionEntity -->
+            <property name="org.hibernate.envers.revision_listener" value="envers.audit.RevisionInfoListener"/>
 
-			<!-- Tracken aller Changes einer Revision -->
-			<property name="org.hibernate.envers.track_entities_changed_in_revision" value="true" />
+            <!-- Tracken der Aenderungen auf Attribut -->
+            <!-- property name="org.hibernate.envers.global_with_modified_flag" value="true" / -->
 
-			<!--property name="javax.persistence.schema-generation.database.action"
-				value="drop-and-create" /-->
-		</properties>
+            <!-- Tracken aller Changes einer Revision -->
+            <property name="org.hibernate.envers.track_entities_changed_in_revision" value="true"/>
 
-	</persistence-unit>
+            <property name="javax.persistence.schema-generation.database.action"
+                      value="drop-and-create"/>
+        </properties>
+
+    </persistence-unit>
 
 </persistence> 
