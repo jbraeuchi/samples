@@ -61,12 +61,12 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>5.0.1.Final</version>
+				<version>5.0.7.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-envers</artifactId>
-				<version>5.0.1.Final</version>
+				<version>5.0.7.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
