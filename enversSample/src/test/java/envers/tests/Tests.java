@@ -90,7 +90,7 @@ public class Tests {
         px.setName("Holmes");
         px.setVorname("Sherlock");
         px.setAdresse("221b Baker Street, London");
-        px.setGeburtstag(LocalDate.of(1914, 1, 6));
+        //      px.setGeburtstag(LocalDate.of(1914, 1, 6));
 
         EnvCompany ibm = new EnvCompany();
         ibm.setName("IBM");
