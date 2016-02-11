@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Tests {
@@ -29,6 +30,7 @@ public class Tests {
         p1.setName("Bond");
         p1.setVorname("James");
         p1.setAdresse("Somewhere in the Bahamas");
+        p1.setGeburtstag(LocalDate.of(1920, 11, 11));
 
         EntityTransaction tx1 = em.getTransaction();
         tx1.begin();
@@ -71,6 +73,7 @@ public class Tests {
         p1.setName("Bond");
         p1.setVorname("James");
         p1.setAdresse("Somewhere in the Bahamas");
+        p1.setGeburtstag(LocalDate.of(1920, 11, 11));
 
         EntityTransaction tx1 = em.getTransaction();
         tx1.begin();
@@ -87,6 +90,7 @@ public class Tests {
         px.setName("Holmes");
         px.setVorname("Sherlock");
         px.setAdresse("221b Baker Street, London");
+        px.setGeburtstag(LocalDate.of(1914, 1, 6));
 
         EnvCompany ibm = new EnvCompany();
         ibm.setName("IBM");

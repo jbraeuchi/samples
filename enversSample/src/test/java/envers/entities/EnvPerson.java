@@ -1,18 +1,14 @@
 package envers.entities;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Audited
 @Access(AccessType.FIELD)
-@Table(name="ENV_PERSON")
+@Table(name = "ENV_PERSON")
 public class EnvPerson {
 
     @Id
@@ -21,6 +17,7 @@ public class EnvPerson {
     private String vorname;
     private String name;
     private String adresse;
+    private LocalDate geburtstag;
 
     public String getVorname() {
         return vorname;
@@ -50,10 +47,18 @@ public class EnvPerson {
         return id;
     }
 
+    public LocalDate getGeburtstag() {
+        return geburtstag;
+    }
+
+    public void setGeburtstag(LocalDate geburtstag) {
+        this.geburtstag = geburtstag;
+    }
+
     @Override
     public String toString() {
         return "EnvPerson [id=" + id + ", vorname=" + vorname + ", name=" + name + ", adresse=" + adresse + "]";
     }
 
-        
+
 }
