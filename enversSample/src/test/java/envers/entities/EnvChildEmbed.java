@@ -21,4 +21,20 @@ public class EnvChildEmbed {
     public String toString() {
         return "EnvChildEmbed [name=" + name + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EnvChildEmbed that = (EnvChildEmbed) o;
+
+        return !(name != null ? !name.equals(that.name) : that.name != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
 }

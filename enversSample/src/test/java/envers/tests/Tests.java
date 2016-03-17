@@ -140,17 +140,17 @@ public class Tests {
         long idChild = c1.getId();
 
         // neuer Name, neues Child C2
-        EnvParent p = em.find(EnvParent.class, idParent);
-        p.setName("Parent 1 update");
+        EnvParent p2 = em.find(EnvParent.class, idParent);
+        p2.setName("Parent 1 update");
 
         EnvChild c2 = new EnvChild();
         c2.setName("Child 2");
-        c2.setParent(p);
-        p1.getChildren().add(c2);
+        c2.setParent(p2);
+        p2.getChildren().add(c2);
 
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
-        em.persist(p1);
+        em.persist(p2);
         tx2.commit();           // B: zweite Revision
 
         AuditReader ar = AuditReaderFactory.get(em);
@@ -196,27 +196,42 @@ public class Tests {
         long idParent = p1.getId();
 
         // neuer Name, neues Child C2
-        EnvParent p = em.find(EnvParent.class, idParent);
-        p.setName("Parent 1 update");
+        EnvParent p2 = em.find(EnvParent.class, idParent);
+        p2.setName("Parent 1 update");
 
         EnvChildEmbed c2 = new EnvChildEmbed();
         c2.setName("Child 2");
-        p1.getEmbeddedChildren().add(c2);
+        p2.getEmbeddedChildren().add(c2);
 
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
-        em.persist(p1);
+        em.persist(p2);
         tx2.commit();           // B: zweite Revision
+
+        // C1 löschen, neues Child C3
+        EnvParent p3 = em.find(EnvParent.class, idParent);
+        p3.getEmbeddedChildren().remove(c1);
+
+        EnvChildEmbed c3 = new EnvChildEmbed();
+        c3.setName("Child 3");
+        p3.getEmbeddedChildren().add(c3);
+
+        EntityTransaction tx3 = em.getTransaction();
+        tx3.begin();
+        em.persist(p3);
+        tx3.commit();           // C: dritte Revision
 
         AuditReader ar = AuditReaderFactory.get(em);
 
-        // Liest beide Revisionen von EnvParent, die erste hat nur ein Child, die zweite zwei
+        // Liest drei Revisionen von EnvParent, die erste hat nur ein Child, die zweite zwei
         List<Number> revParent = ar.getRevisions(EnvParent.class, idParent);  // alle Revisions Parent
         EnvParent envParent1 = ar.find(EnvParent.class, idParent, revParent.get(0));
         EnvParent envParent2 = ar.find(EnvParent.class, idParent, revParent.get(1));
+        EnvParent envParent3 = ar.find(EnvParent.class, idParent, revParent.get(2));
 
         System.out.println(envParent1);
         System.out.println(envParent2);
+        System.out.println(envParent3);
 
         em.close();
     }
