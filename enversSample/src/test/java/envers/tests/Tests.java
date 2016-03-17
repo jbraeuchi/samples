@@ -1,9 +1,6 @@
 package envers.tests;
 
-import envers.entities.EnvChild;
-import envers.entities.EnvCompany;
-import envers.entities.EnvParent;
-import envers.entities.EnvPerson;
+import envers.entities.*;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditQuery;
@@ -174,6 +171,52 @@ public class Tests {
 
         System.out.println(envChild1);
         System.out.println(envChild2);
+
+        em.close();
+    }
+
+    @Test
+    public void testEmbedded() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+        EntityManager em = emf.createEntityManager();
+
+        // Initial Version of P1 and C1
+        EnvParent p1 = new EnvParent();
+        p1.setName("Parent 1");
+
+        EnvChildEmbed c1 = new EnvChildEmbed();
+        c1.setName("Child 1");
+        p1.getEmbeddedChildren().add(c1);
+
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+        em.persist(p1);
+        tx1.commit();           // A: erste Revision
+
+        long idParent = p1.getId();
+
+        // neuer Name, neues Child C2
+        EnvParent p = em.find(EnvParent.class, idParent);
+        p.setName("Parent 1 update");
+
+        EnvChildEmbed c2 = new EnvChildEmbed();
+        c2.setName("Child 2");
+        p1.getEmbeddedChildren().add(c2);
+
+        EntityTransaction tx2 = em.getTransaction();
+        tx2.begin();
+        em.persist(p1);
+        tx2.commit();           // B: zweite Revision
+
+        AuditReader ar = AuditReaderFactory.get(em);
+
+        // Liest beide Revisionen von EnvParent, die erste hat nur ein Child, die zweite zwei
+        List<Number> revParent = ar.getRevisions(EnvParent.class, idParent);  // alle Revisions Parent
+        EnvParent envParent1 = ar.find(EnvParent.class, idParent, revParent.get(0));
+        EnvParent envParent2 = ar.find(EnvParent.class, idParent, revParent.get(1));
+
+        System.out.println(envParent1);
+        System.out.println(envParent2);
 
         em.close();
     }

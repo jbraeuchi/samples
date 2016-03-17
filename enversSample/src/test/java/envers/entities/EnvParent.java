@@ -19,6 +19,10 @@ public class EnvParent {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
     private Set<EnvChild> children = new HashSet<EnvChild>();
 
+    @ElementCollection
+    @CollectionTable(name = "ENV_CHILD_EMBED")
+    private Set<EnvChildEmbed> embeddedChildren = new HashSet<EnvChildEmbed>();
+
     public String getName() {
         return name;
     }
@@ -35,9 +39,13 @@ public class EnvParent {
         return children;
     }
 
+    public Set<EnvChildEmbed> getEmbeddedChildren() {
+        return embeddedChildren;
+    }
+
     @Override
     public String toString() {
-        return "EnvParent [id=" + id + ", name=" + name + ", children" + children + "]";
+        return "EnvParent [id=" + id + ", name=" + name + ", children=" + children + ",embeddeChildren=" + embeddedChildren + "]";
     }
 
 
