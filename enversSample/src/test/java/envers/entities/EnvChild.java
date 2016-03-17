@@ -41,7 +41,7 @@ public class EnvChild {
 
     @Override
     public String toString() {
-        return "EnvChild [id=" + id + ", name=" + name + ", parentName" + parent.getName() + "]";
+        return "EnvChild [id=" + id + ", name=" + name + ", parentName=" + parent.getName() + "]";
     }
 
     @Override

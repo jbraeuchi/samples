@@ -1,6 +1,7 @@
 package envers.tests;
 
 import envers.entities.*;
+import junit.framework.Assert;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditQuery;
@@ -172,6 +173,14 @@ public class Tests {
         System.out.println(envChild1);
         System.out.println(envChild2);
 
+        Assert.assertEquals(1, envParent1.getChildren().size());
+        Assert.assertEquals(2, envParent2.getChildren().size());
+
+        Assert.assertTrue(envParent1.getChildren().contains(c1));
+
+        Assert.assertTrue(envParent2.getChildren().contains(c1));
+        Assert.assertTrue(envParent2.getChildren().contains(c2));
+
         em.close();
     }
 
@@ -223,7 +232,7 @@ public class Tests {
 
         AuditReader ar = AuditReaderFactory.get(em);
 
-        // Liest drei Revisionen von EnvParent, die erste hat nur ein Child, die zweite zwei
+        // Liest drei Revisionen von EnvParent, die erste hat nur ein Child, die zweite und dritte zwei
         List<Number> revParent = ar.getRevisions(EnvParent.class, idParent);  // alle Revisions Parent
         EnvParent envParent1 = ar.find(EnvParent.class, idParent, revParent.get(0));
         EnvParent envParent2 = ar.find(EnvParent.class, idParent, revParent.get(1));
@@ -232,6 +241,19 @@ public class Tests {
         System.out.println(envParent1);
         System.out.println(envParent2);
         System.out.println(envParent3);
+
+        Assert.assertEquals(1, envParent1.getEmbeddedChildren().size());
+        Assert.assertEquals(2, envParent2.getEmbeddedChildren().size());
+        Assert.assertEquals(2, envParent3.getEmbeddedChildren().size());
+
+        Assert.assertTrue(envParent1.getEmbeddedChildren().contains(c1));
+
+        Assert.assertTrue(envParent2.getEmbeddedChildren().contains(c1));
+        Assert.assertTrue(envParent2.getEmbeddedChildren().contains(c2));
+
+        Assert.assertFalse(envParent3.getEmbeddedChildren().contains(c1));
+        Assert.assertTrue(envParent3.getEmbeddedChildren().contains(c2));
+        Assert.assertTrue(envParent3.getEmbeddedChildren().contains(c3));
 
         em.close();
     }
