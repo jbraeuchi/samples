@@ -25,8 +25,16 @@ public class EmEntity {
     private EmEmbeddableOne one;
 
     @ElementCollection
-    @CollectionTable(name = "EM_ENTITY_TWOS")
-    private Set<EmEmbeddableTwo> manyTwos;
+    @CollectionTable(name = "EM_ENTITY_ONES")
+    @AttributeOverrides({
+            @AttributeOverride(name = "date", column = @Column(name = "OV_DATE_ONE")),
+            @AttributeOverride(name = "two.date", column = @Column(name = "OV_DATE_TWO")),
+            @AttributeOverride(name = "two.three.date", column = @Column(name = "OV_DATE_THREE")),
+            @AttributeOverride(name = "name", column = @Column(name = "OV_NAME_ONE")),
+            @AttributeOverride(name = "two.name", column = @Column(name = "OV_NAME_TWO")),
+            @AttributeOverride(name = "two.three.name", column = @Column(name = "OV_NAME_THREE")),
+    })
+    private Set<EmEmbeddableOne> manyOnes;
 
     public long getId() {
         return id;
@@ -60,11 +68,11 @@ public class EmEntity {
         this.one = one;
     }
 
-    public Set<EmEmbeddableTwo> getManyTwos() {
-        return manyTwos;
+    public Set<EmEmbeddableOne> getManyTwos() {
+        return manyOnes;
     }
 
-    public void setManyTwos(Set<EmEmbeddableTwo> manyTwos) {
-        this.manyTwos = manyTwos;
+    public void setManyTwos(Set<EmEmbeddableOne> manyTwos) {
+        this.manyOnes = manyTwos;
     }
 }
