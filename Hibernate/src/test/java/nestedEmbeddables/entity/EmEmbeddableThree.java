@@ -17,12 +17,6 @@ public class EmEmbeddableThree {
     @Type(type = "org.joda.time.contrib.hibernate.PersistentLocalDate")
     private LocalDate date;
 
-    @Embedded
-    @AttributeOverrides ({
-        @AttributeOverride(name = "date", column = @Column(name = "OV_DATE_FOUR"))
-    })
-    private EmEmbeddableFour four;
-
     public String getName() {
         return name;
     }
@@ -39,11 +33,5 @@ public class EmEmbeddableThree {
         this.date = date;
     }
 
-    public EmEmbeddableFour getFour() {
-        return four;
-    }
 
-    public void setFour(EmEmbeddableFour four) {
-        this.four = four;
-    }
 }

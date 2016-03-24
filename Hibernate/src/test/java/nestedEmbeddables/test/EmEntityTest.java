@@ -2,17 +2,11 @@ package nestedEmbeddables.test;
 
 import junit.framework.TestCase;
 import nestedEmbeddables.entity.*;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
-import org.hibernate.dialect.MySQL57InnoDBDialect;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
@@ -34,14 +28,9 @@ public class EmEntityTest extends TestCase {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
         EntityManager em = emf.createEntityManager();
 
-        EmEmbeddableFour four = new EmEmbeddableFour();
-        four.setName("Embeddable Four");
-        four.setDate(LocalDate.now());
-
         EmEmbeddableThree three = new EmEmbeddableThree();
         three.setName("Embeddable Three");
         three.setDate(LocalDate.now());
-        three.setFour(four);
 
         EmEmbeddableTwo two = new EmEmbeddableTwo();
         two.setName("Embeddable Two");

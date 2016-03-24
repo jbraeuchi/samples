@@ -25,8 +25,8 @@ public class EmEntity {
     private EmEmbeddableOne one;
 
     @ElementCollection
-    @CollectionTable(name = "EM_ENTITY_ONES")
-    private Set<EmEmbeddableThree> manyThrees;
+    @CollectionTable(name = "EM_ENTITY_TWOS")
+    private Set<EmEmbeddableTwo> manyTwos;
 
     public long getId() {
         return id;
@@ -60,11 +60,11 @@ public class EmEntity {
         this.one = one;
     }
 
-    public Set<EmEmbeddableThree> getManyThrees() {
-        return manyThrees;
+    public Set<EmEmbeddableTwo> getManyTwos() {
+        return manyTwos;
     }
 
-    public void setManyThrees(Set<EmEmbeddableThree> manyThrees) {
-        this.manyThrees = manyThrees;
+    public void setManyTwos(Set<EmEmbeddableTwo> manyTwos) {
+        this.manyTwos = manyTwos;
     }
 }

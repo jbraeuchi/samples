@@ -3,9 +3,7 @@ package nestedEmbeddables.entity;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.*;
 
 /**
  * Created by jakob on 24.03.2016.
@@ -20,6 +18,9 @@ public class EmEmbeddableTwo {
     private LocalDate date;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "date", column = @Column(name = "OV_DATE_THREE"))
+    })
     private EmEmbeddableThree three;
 
     public String getName() {
