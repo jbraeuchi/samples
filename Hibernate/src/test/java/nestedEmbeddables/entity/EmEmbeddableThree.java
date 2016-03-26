@@ -14,7 +14,7 @@ public class EmEmbeddableThree {
     private String name;
 
     @Column(name = "DATE_THREE")
-    @Type(type = "org.joda.time.contrib.hibernate.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate date;
 
     public String getName() {

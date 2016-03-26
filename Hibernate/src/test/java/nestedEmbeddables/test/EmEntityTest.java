@@ -1,27 +1,22 @@
 package nestedEmbeddables.test;
 
 import junit.framework.TestCase;
-import nestedEmbeddables.entity.*;
+import nestedEmbeddables.entity.EmEmbeddableOne;
+import nestedEmbeddables.entity.EmEmbeddableThree;
+import nestedEmbeddables.entity.EmEmbeddableTwo;
+import nestedEmbeddables.entity.EmEntity;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
  * Created by jakob on 24.03.2016.
  */
 public class EmEntityTest extends TestCase {
-
-    @Test
-    public void testExportSchema() {
-//        AnnotationConfiguration configuration = new AnnotationConfiguration();
-//        configuration.setProperty(Environment.DIALECT, MySQL57InnoDBDialect.class.getName());
-//        SchemaExport schemaExport = new SchemaExport(configuration);
-//        schemaExport.setFormat(true);
-//        schemaExport.create(true, false);
-    }
 
     @Test
     public void testEmbedded() {
@@ -48,9 +43,9 @@ public class EmEntityTest extends TestCase {
         e1.setOne(one);
 
 
-//        EntityTransaction tx1 = em.getTransaction();
-//        tx1.begin();
-//        em.persist(e1);
-//        tx1.commit();
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+        em.persist(e1);
+        tx1.commit();
     }
 }

@@ -18,7 +18,7 @@ public class EmEntity {
     private long id;
     private String name;
 
-    @Type(type = "org.joda.time.contrib.hibernate.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate birthdate;
 
     @Embedded
@@ -30,6 +30,7 @@ public class EmEntity {
             @AttributeOverride(name = "date", column = @Column(name = "OV_DATE_ONE")),
             @AttributeOverride(name = "two.date", column = @Column(name = "OV_DATE_TWO")),
             @AttributeOverride(name = "two.three.date", column = @Column(name = "OV_DATE_THREE")),
+
             @AttributeOverride(name = "name", column = @Column(name = "OV_NAME_ONE")),
             @AttributeOverride(name = "two.name", column = @Column(name = "OV_NAME_TWO")),
             @AttributeOverride(name = "two.three.name", column = @Column(name = "OV_NAME_THREE")),
