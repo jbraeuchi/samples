@@ -41,7 +41,7 @@ public class EmEntityTest extends TestCase {
         e1.setName("Entity 1");
         e1.setBirthdate(LocalDate.now());
         e1.setOne(one);
-
+        e1.getManyOnes().add(one);
 
         EntityTransaction tx1 = em.getTransaction();
         tx1.begin();

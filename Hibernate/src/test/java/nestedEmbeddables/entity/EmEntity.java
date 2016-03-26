@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -35,7 +36,7 @@ public class EmEntity {
             @AttributeOverride(name = "two.name", column = @Column(name = "OV_NAME_TWO")),
             @AttributeOverride(name = "two.three.name", column = @Column(name = "OV_NAME_THREE")),
     })
-    private Set<EmEmbeddableOne> manyOnes;
+    private Set<EmEmbeddableOne> manyOnes = new HashSet<>();
 
     public long getId() {
         return id;
@@ -69,11 +70,11 @@ public class EmEntity {
         this.one = one;
     }
 
-    public Set<EmEmbeddableOne> getManyTwos() {
+    public Set<EmEmbeddableOne> getManyOnes() {
         return manyOnes;
     }
 
-    public void setManyTwos(Set<EmEmbeddableOne> manyTwos) {
-        this.manyOnes = manyTwos;
+    public void setManyOnes(Set<EmEmbeddableOne> manyOnes) {
+        this.manyOnes = manyOnes;
     }
 }
