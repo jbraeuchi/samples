@@ -18,9 +18,6 @@ public class EmEmbeddableTwo {
     private LocalDate date;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "date", column = @Column(name = "OV_DATE_THREE"))
-    })
     private EmEmbeddableThree three;
 
     public String getName() {
