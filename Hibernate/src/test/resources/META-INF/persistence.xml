@@ -1,0 +1,28 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             version="1.0">
+
+    <persistence-unit name="TEST" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- All persistence classes must be listed -->
+        <class>nestedEmbeddables.entity.EmEntity</class>
+
+        <class>detach.entity.DetachA</class>
+        <class>detach.entity.DetachB</class>
+        <class>detach.entity.DetachC</class>
+
+        <properties>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/test"/>
+            <property name="hibernate.connection.username" value="test"/>
+            <property name="hibernate.connection.password" value="test"/>
+
+            <property name="hibernate.archive.autodetection" value="class"/>
+
+            <property name="javax.persistence.schema-generation.database.action"
+                      value="drop-and-create"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence> 
