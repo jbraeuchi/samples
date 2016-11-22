@@ -313,7 +313,8 @@ public class Tests {
         em.persist(p2);
         tx1.commit();
 
-        // selct and update minimal Entities
+        // select and update minimal Entities
+        // _AUD Table will only contain Data from minimal Entity
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
         TypedQuery<EnvPersonMinimal> q = em.createQuery("select p from EnvPersonMinimal p where p.name like :name", EnvPersonMinimal.class);
