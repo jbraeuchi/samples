@@ -9,10 +9,7 @@ import org.hibernate.envers.query.criteria.internal.IlikeAuditExpression;
 import org.hibernate.envers.query.internal.property.EntityPropertyName;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -258,4 +255,71 @@ public class Tests {
         em.close();
     }
 
+    @Test
+    public void testUpdateWithQuery() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+        EntityManager em = emf.createEntityManager();
+
+        EnvPerson p1 = new EnvPerson();
+        p1.setName("Name_1");
+        p1.setVorname("Firstname_1");
+        p1.setAdresse("Address_1");
+        p1.setStatus(1);
+
+        EnvPerson p2 = new EnvPerson();
+        p2.setName("Name_2");
+        p2.setVorname("Firstname_2");
+        p2.setAdresse("Address_2");
+        p2.setStatus(1);
+
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+        em.persist(p1);
+        em.persist(p2);
+        tx1.commit();
+
+        // update with Query
+        // Envers _AUD not updated !
+        EntityTransaction tx2 = em.getTransaction();
+        tx2.begin();
+        Query q = em.createQuery("UPDATE EnvPerson p SET p.status = :status where p.name like :name");
+        q.setParameter("status", 2);
+        q.setParameter("name", "Name_%");
+        q.executeUpdate();
+
+        tx2.commit();
+    }
+
+    @Test
+    public void testUpdateMinimalEntities() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+        EntityManager em = emf.createEntityManager();
+
+        EnvPerson p1 = new EnvPerson();
+        p1.setName("Name_1");
+        p1.setVorname("Firstname_1");
+        p1.setAdresse("Address_1");
+        p1.setStatus(1);
+
+        EnvPerson p2 = new EnvPerson();
+        p2.setName("Name_2");
+        p2.setVorname("Firstname_2");
+        p2.setAdresse("Address_2");
+        p2.setStatus(1);
+
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+        em.persist(p1);
+        em.persist(p2);
+        tx1.commit();
+
+        // selct and update minimal Entities
+        EntityTransaction tx2 = em.getTransaction();
+        tx2.begin();
+        TypedQuery<EnvPersonMinimal> q = em.createQuery("select p from EnvPersonMinimal p where p.name like :name", EnvPersonMinimal.class);
+        q.setParameter("name", "Name_%");
+        List<EnvPersonMinimal> persons = q.getResultList();
+        persons.forEach(p -> p.setStatus(2));
+        tx2.commit();
+    }
 }

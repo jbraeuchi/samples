@@ -18,6 +18,7 @@ public class EnvPerson {
     private String name;
     private String adresse;
     private LocalDate geburtstag;
+    private int status;
 
     public String getVorname() {
         return vorname;
@@ -53,6 +54,14 @@ public class EnvPerson {
 
     public void setGeburtstag(LocalDate geburtstag) {
         this.geburtstag = geburtstag;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

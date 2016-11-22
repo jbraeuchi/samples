@@ -6,6 +6,7 @@
 
         <!-- All persistence classes must be listed -->
         <class>envers.entities.EnvPerson</class>
+        <class>envers.entities.EnvPersonMinimal</class>
         <class>envers.entities.EnvCompany</class>
         <class>envers.entities.EnvParent</class>
         <class>envers.entities.EnvChild</class>
