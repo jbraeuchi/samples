@@ -15,6 +15,16 @@ public class Tests {
 
     @Test
     public void test1() throws Exception {
+        CompletableFuture<String> fHello = CompletableFuture.supplyAsync(() -> getHello(2000));
+        fHello.thenAccept((s1) -> System.out.println("Callback: " + s1));
+
+        System.out.println("before get: " + System.currentTimeMillis());
+        fHello.get();
+        System.out.println("after get: " + System.currentTimeMillis());
+    }
+
+    @Test
+    public void testCombine() throws Exception {
         CompletableFuture<String> fHello = CompletableFuture.supplyAsync(() -> getHello(1000));
         CompletableFuture<String> fWorld = CompletableFuture.supplyAsync(() -> getWorld(0));
 
@@ -26,7 +36,7 @@ public class Tests {
     }
 
     @Test
-    public void test2() throws Exception {
+    public void testAccept() throws Exception {
         CompletableFuture<String> fHello = CompletableFuture.supplyAsync(() -> getHello(0));
         CompletableFuture<String> fWorld = CompletableFuture.supplyAsync(() -> getWorld(2000));
 
@@ -38,7 +48,7 @@ public class Tests {
     }
 
     @Test
-    public void test3() throws Exception {
+    public void testAllOf() throws Exception {
         CompletableFuture<String> fHello = CompletableFuture.supplyAsync(() -> getHello(1000));
         CompletableFuture<String> fWorld1 = CompletableFuture.supplyAsync(() -> getWorld(0));
         CompletableFuture<String> fWorld2 = CompletableFuture.supplyAsync(() -> getText("World!", 1000));
