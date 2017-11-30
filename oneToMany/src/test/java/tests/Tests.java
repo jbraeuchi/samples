@@ -10,6 +10,8 @@ import entities.embed.CompanyEB;
 import entities.embed.EmployeeEB;
 import entities.embed2.CompanyEB2;
 import entities.embed2.EmployeeEB2;
+import entities.entitygraph.CompanyEG;
+import entities.entitygraph.EmployeeEG;
 import entities.unidir.CompanyUD;
 import entities.unidir.EmployeeUD;
 import org.junit.Assert;
@@ -277,4 +279,58 @@ public class Tests {
         Assert.assertEquals(1, cmp.getManagers().size());
     }
 
+    @Test
+    public void testEntitygraph() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST_O2M");
+        EntityManager em = emf.createEntityManager();
+
+        CompanyEG company = new CompanyEG();
+        company.setName("IBM");
+
+        EmployeeEG emp1 = new EmployeeEG();
+        emp1.setName("Employee 1");
+        company.getEmployees().add(emp1);
+
+        EmployeeEG emp2 = new EmployeeEG();
+        emp2.setName("Employee 2");
+        company.getEmployees().add(emp2);
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(company);
+        tx.commit();
+        em.close();
+
+        // single select for company and employees
+        em = emf.createEntityManager();
+        EntityGraph<?> eg = em.getEntityGraph("Company.employees");
+        TypedQuery<CompanyEG> qp = em.createQuery("select distinct c from CompanyEG c", CompanyEG.class);
+        qp.setHint("javax.persistence.loadgraph", eg);
+        List<CompanyEG> companies = qp.getResultList();
+        CompanyEG cmp = companies.get(0);
+
+        Assert.assertEquals(1, companies.size());
+        Assert.assertEquals(2, cmp.getEmployees().size());
+        Assert.assertEquals(null, companies.get(0).getManager());
+
+        // Add The Boss
+        tx = em.getTransaction();
+        tx.begin();
+
+        EmployeeEG manager = new EmployeeEG();
+        manager.setName("The Boss");
+        cmp.getEmployees().add(manager);
+        cmp.setManager(manager);
+        tx.commit();
+        em.close();
+
+        em = emf.createEntityManager();
+        qp = em.createQuery("select c from CompanyEG c", CompanyEG.class);
+        companies = qp.getResultList();
+        cmp = companies.get(0);
+
+        Assert.assertEquals(1, companies.size());
+        Assert.assertEquals(3, cmp.getEmployees().size());
+        Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+    }
 }
