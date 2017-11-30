@@ -1,9 +1,8 @@
 package nestedEmbeddables.entity;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +18,6 @@ public class EmEntity {
     private long id;
     private String name;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate birthdate;
 
     @Embedded

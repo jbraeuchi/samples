@@ -1,9 +1,9 @@
 package nestedEmbeddables.entity;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.time.LocalDate;
 
 /**
  * Created by jakob on 24.03.2016.
@@ -14,7 +14,6 @@ public class EmEmbeddableThree {
     private String name;
 
     @Column(name = "DATE_THREE")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate date;
 
     public String getName() {

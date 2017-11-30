@@ -5,13 +5,13 @@ import nestedEmbeddables.entity.EmEmbeddableOne;
 import nestedEmbeddables.entity.EmEmbeddableThree;
 import nestedEmbeddables.entity.EmEmbeddableTwo;
 import nestedEmbeddables.entity.EmEntity;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 
 /**
  * Created by jakob on 24.03.2016.
