@@ -1,4 +1,4 @@
-package nestedEmbeddables;
+package nestedEmbeddables.util;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
