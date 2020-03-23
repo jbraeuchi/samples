@@ -9,17 +9,18 @@ import javax.persistence.Persistence;
 
 public class Test extends TestCase {
 
-    public void testElementCollection_udate() {
+    public void testElementCollection_update() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
         EntityManager em = emf.createEntityManager();
 
+//        long now = System.currentTimeMillis();
         Element el1 = new Element();
         el1.setName("Element One");
-        el1.setDate(System.currentTimeMillis());
+        el1.setDate(1000);
 
         Element el2 = new Element();
         el2.setName("Element Two");
-        el2.setDate(System.currentTimeMillis());
+        el2.setDate(2000);
 
         EcEntity e1 = new EcEntity();
         e1.setName("Entity 1");
@@ -42,7 +43,7 @@ public class Test extends TestCase {
 
         Element el3 = new Element();
         el3.setName("Element Three");
-        el3.setDate(System.currentTimeMillis());
+        el3.setDate(3000);
         e1db.getElements().add(el3);
         tx2.commit();
     }
