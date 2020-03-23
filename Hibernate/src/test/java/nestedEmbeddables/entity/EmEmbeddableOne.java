@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Created by jakob on 24.03.2016.
@@ -42,5 +43,19 @@ public class EmEmbeddableOne {
 
     public void setTwo(EmEmbeddableTwo two) {
         this.two = two;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmEmbeddableOne that = (EmEmbeddableOne) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, date);
     }
 }

@@ -79,7 +79,7 @@ public class EmEntityTest extends TestCase {
         EmEmbeddableOne o3 = new EmEmbeddableOne();
         o3.setName("Embeddable Three");
         o3.setDate(LocalDate.now());
-        e1db.getManyOnes().add(o2);
+        e1db.getManyOnes().add(o3);
         tx2.commit();
     }
 }
