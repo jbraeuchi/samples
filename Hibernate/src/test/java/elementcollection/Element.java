@@ -1,11 +1,14 @@
 package elementcollection;
 
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
+@Audited
 public class Element {
     // https://stackoverflow.com/questions/3742897/hibernate-elementcollection-strange-delete-insert-behavior
     // nullable = false prevents delete/insert of whole collection

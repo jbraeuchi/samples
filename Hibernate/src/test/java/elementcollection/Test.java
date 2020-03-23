@@ -21,7 +21,7 @@ public class Test extends TestCase {
         el2.setName("Element Two");
         el2.setDate(System.currentTimeMillis());
 
-        Entity e1 = new Entity();
+        EcEntity e1 = new EcEntity();
         e1.setName("Entity 1");
         e1.getElements().add(el1);
         e1.getElements().add(el2);
@@ -35,7 +35,7 @@ public class Test extends TestCase {
 
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
-        Entity e1db = em.find(Entity.class, e1.getId());
+        EcEntity e1db = em.find(EcEntity.class, e1.getId());
 
         Element eldb = e1db.getElements().iterator().next();
         eldb.setName("Element UPDATED");

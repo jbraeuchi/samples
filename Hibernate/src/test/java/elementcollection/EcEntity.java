@@ -1,12 +1,15 @@
 package elementcollection;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "EC_ENTITY")
-public class Entity {
+@Audited
+public class EcEntity {
     @Id
     @GeneratedValue
     private long id;
