@@ -1,7 +1,6 @@
 package usertype.type;
 
 import org.hibernate.dialect.Dialect;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.DiscriminatorType;
 import org.hibernate.type.PrimitiveType;
@@ -10,8 +9,6 @@ import org.hibernate.type.descriptor.java.JavaTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 
 import java.io.Serializable;
-import java.sql.CallableStatement;
-import java.sql.SQLException;
 
 public class NonNullBooleanType extends AbstractSingleColumnStandardBasicType<Boolean>
         implements PrimitiveType<Boolean>, DiscriminatorType<Boolean> {
