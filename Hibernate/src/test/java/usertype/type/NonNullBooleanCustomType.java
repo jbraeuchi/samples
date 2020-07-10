@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
+// Converts null to Boolean.FALSE
 public class NonNullBooleanCustomType implements UserType {
     @Override
     public int[] sqlTypes() {

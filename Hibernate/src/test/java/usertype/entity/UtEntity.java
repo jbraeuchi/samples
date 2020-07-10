@@ -17,6 +17,7 @@ public class UtEntity {
 
     private Boolean bool1;
 
+//    @Type(type="usertype.type.NonNullBooleanType")
     @Type(type="usertype.type.NonNullBooleanCustomType")
     private Boolean bool2;
 

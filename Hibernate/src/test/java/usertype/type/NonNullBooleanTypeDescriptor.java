@@ -3,6 +3,8 @@ package usertype.type;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.BooleanTypeDescriptor;
 
+// TypeDescriptor is NOT called when value is NULL, so it does not work !!!
+// @see org.hibernate.type.descriptor.sql.BasicBinder.bind()
 public class NonNullBooleanTypeDescriptor extends BooleanTypeDescriptor {
     public static final NonNullBooleanTypeDescriptor INSTANCE = new NonNullBooleanTypeDescriptor();
 
