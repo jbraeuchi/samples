@@ -3,10 +3,8 @@ package usertype.test;
 import org.junit.Test;
 import usertype.entity.UtEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
@@ -54,6 +52,30 @@ public class UTTest {
         assertEquals(entity, fromdb);
         assertEquals("ut-true", fromdb.getName());
         assertTrue(fromdb.getBool1());
+        assertTrue(fromdb.getBool2());
+    }
+
+    @Test
+    public void persist_true_query() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+        EntityManager em = emf.createEntityManager();
+
+        UtEntity entity = new UtEntity();
+        entity.setName("ut-true-q");
+        entity.setBool1(null);
+        entity.setBool2(true);
+
+        System.out.println(entity);
+        doInTransaction(em, e -> e.persist(entity));
+
+        TypedQuery<UtEntity> q = em.createNamedQuery("findBybool2true", UtEntity.class);
+        List<UtEntity> results = q.getResultList();
+        System.out.println(results);
+        UtEntity fromdb = results.get(0);
+
+        assertEquals(entity, fromdb);
+        assertEquals("ut-true-q", fromdb.getName());
+        assertNull(fromdb.getBool1());
         assertTrue(fromdb.getBool2());
     }
 

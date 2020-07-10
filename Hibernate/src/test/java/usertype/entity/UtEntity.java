@@ -2,13 +2,13 @@ package usertype.entity;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "UT_ENTITY")
+@NamedQueries(
+        @NamedQuery(name = "findBybool2true", query = "select u from UtEntity u  where bool2 = true")
+)
 public class UtEntity {
     @Id
     @GeneratedValue
@@ -17,8 +17,8 @@ public class UtEntity {
 
     private Boolean bool1;
 
-//    @Type(type="usertype.type.NonNullBooleanType")
-    @Type(type="usertype.type.NonNullBooleanCustomType")
+    //    @Type(type="usertype.type.NonNullBooleanType")
+    @Type(type = "usertype.type.NonNullBooleanCustomType")
     private Boolean bool2;
 
     public long getId() {

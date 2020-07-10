@@ -1,7 +1,10 @@
 package usertype.type;
 
 import org.hibernate.HibernateException;
+import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.LiteralType;
+import org.hibernate.usertype.EnhancedUserType;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
@@ -12,7 +15,7 @@ import java.sql.Types;
 import java.util.Objects;
 
 // Converts null to Boolean.FALSE
-public class NonNullBooleanCustomType implements UserType {
+public class NonNullBooleanCustomType implements EnhancedUserType {
     @Override
     public int[] sqlTypes() {
         return new int[]{Types.BOOLEAN};
@@ -76,4 +79,21 @@ public class NonNullBooleanCustomType implements UserType {
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }
+
+    @Override
+    public String objectToSQLString(Object value) {
+        return value != null ? value.toString() : "null";
+    }
+
+    @Override
+    public String toXMLString(Object value) {
+        return null;
+    }
+
+    @Override
+    public Object fromXMLString(String xmlValue) {
+        return null;
+    }
+
+
 }
