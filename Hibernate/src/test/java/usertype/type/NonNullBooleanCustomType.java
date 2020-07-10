@@ -1,11 +1,8 @@
 package usertype.type;
 
 import org.hibernate.HibernateException;
-import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.hibernate.type.LiteralType;
 import org.hibernate.usertype.EnhancedUserType;
-import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
