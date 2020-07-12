@@ -6,6 +6,7 @@ import usertype.entity.UtEntity;
 import javax.persistence.*;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
@@ -90,7 +91,12 @@ public class UTTest {
         entity.setBool2(false);
 
         System.out.println(entity);
-        doInTransaction(em, e -> e.persist(entity));
+ //       doInTransaction(em, e -> e.persist(entity));
+
+        UtEntity result = (UtEntity) execInTransaction(em, e -> {
+            e.persist(entity);
+            return entity;
+        });
 
         UtEntity fromdb = em.find(UtEntity.class, entity.getId());
         System.out.println(fromdb);
@@ -109,5 +115,17 @@ public class UTTest {
 
         tx1.commit();
         em.clear();
+    }
+
+    private Object execInTransaction(EntityManager em, Function<EntityManager, Object> function) {
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+
+        Object result = function.apply(em);
+
+        tx1.commit();
+        em.clear();
+
+        return result;
     }
 }
