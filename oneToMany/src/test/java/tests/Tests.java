@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 public class Tests {
     @Test
@@ -133,11 +134,12 @@ public class Tests {
 
     @Test
     public void testUnidir_nonPK() {
+        String companyName = "Comp-" + UUID.randomUUID();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST_O2M");
         EntityManager em = emf.createEntityManager();
 
         CompanyUDNPK company = new CompanyUDNPK();
-        company.setName("IBM");
+        company.setName(companyName);
 
         EmployeeUDNPK emp1 = new EmployeeUDNPK();
         emp1.setName("Employee 1");
@@ -154,7 +156,8 @@ public class Tests {
         em.close();
 
         em = emf.createEntityManager();
-        TypedQuery<CompanyUDNPK> qp = em.createQuery("select c from CompanyUDNPK c", CompanyUDNPK.class);
+        TypedQuery<CompanyUDNPK> qp = em.createQuery("select c from CompanyUDNPK c where c.name = :name", CompanyUDNPK.class);
+        qp.setParameter("name", companyName);
         List<CompanyUDNPK> companies = qp.getResultList();
         CompanyUDNPK cmp = companies.get(0);
 
