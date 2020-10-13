@@ -14,6 +14,8 @@ import entities.entitygraph.CompanyEG;
 import entities.entitygraph.EmployeeEG;
 import entities.unidir.CompanyUD;
 import entities.unidir.EmployeeUD;
+import entities.unidirNonPk.CompanyUDNPK;
+import entities.unidirNonPk.EmployeeUDNPK;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -127,6 +129,37 @@ public class Tests {
         Assert.assertEquals(1, companies.size());
         Assert.assertEquals(3, cmp.getEmployees().size());
         Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+    }
+
+    @Test
+    public void testUnidir_nonPK() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST_O2M");
+        EntityManager em = emf.createEntityManager();
+
+        CompanyUDNPK company = new CompanyUDNPK();
+        company.setName("IBM");
+
+        EmployeeUDNPK emp1 = new EmployeeUDNPK();
+        emp1.setName("Employee 1");
+        company.getEmployees().add(emp1);
+
+        EmployeeUDNPK emp2 = new EmployeeUDNPK();
+        emp2.setName("Employee 2");
+        company.getEmployees().add(emp2);
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.persist(company);
+        tx.commit();
+        em.close();
+
+        em = emf.createEntityManager();
+        TypedQuery<CompanyUDNPK> qp = em.createQuery("select c from CompanyUDNPK c", CompanyUDNPK.class);
+        List<CompanyUDNPK> companies = qp.getResultList();
+        CompanyUDNPK cmp = companies.get(0);
+
+        Assert.assertEquals(1, companies.size());
+        Assert.assertEquals(2, cmp.getEmployees().size());
     }
 
     @Test

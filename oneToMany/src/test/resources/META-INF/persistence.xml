@@ -1,22 +1,31 @@
-
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	version="1.0">
+			 version="1.0">
 
 	<persistence-unit name="TEST_O2M" transaction-type="RESOURCE_LOCAL">
-		<!-- provider>org.eclipse.persistence.jpa.PersistenceProvider</provider-->
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		
-		<!-- All persistence classes must be listed -->
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test" />
-			<property name="javax.persistence.jdbc.user" value="test" />
-			<property name="javax.persistence.jdbc.password" value="test" />
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />
+		<!-- All persistence classes must be listed -->
+
+		<class>entities.unidir.CompanyUD</class>
+		<class>entities.unidir.EmployeeUD</class>
+
+		<class>entities.unidirNonPk.CompanyUDNPK</class>
+		<class>entities.unidirNonPk.EmployeeUDNPK</class>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Zurich"/>
+			<property name="javax.persistence.jdbc.user" value="test"/>
+			<property name="javax.persistence.jdbc.password" value="test"/>
+
+			<property name="hibernate.archive.autodetection" value="class"/>
+
+			<property name="javax.persistence.schema-generation.database.action"
+					  value="drop-and-create"/>
 		</properties>
 
 	</persistence-unit>
-
 
 </persistence> 
