@@ -1,6 +1,7 @@
 package entities.unidirNonPk;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "O2M_CompanyUD_NPK")
-public class CompanyUDNPK {
+public class CompanyUDNPK implements Serializable {
 
 	@Id
 	@GeneratedValue
