@@ -169,9 +169,7 @@ public class Tests {
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
 
-        List<CompanyUDNPK> persistent = em.createQuery("select c from CompanyUDNPK c", CompanyUDNPK.class).getResultList();
-        EntityManager finalEm = em;
-        persistent.forEach(c -> finalEm.remove(c));
+        em.createQuery("delete from CompanyUDNPK").executeUpdate();
 
         tx2.commit();
         em.close();
