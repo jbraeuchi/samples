@@ -169,6 +169,7 @@ public class Tests {
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
 
+        em.createQuery("delete from EmployeeUDNPK").executeUpdate();
         em.createQuery("delete from CompanyUDNPK").executeUpdate();
 
         tx2.commit();

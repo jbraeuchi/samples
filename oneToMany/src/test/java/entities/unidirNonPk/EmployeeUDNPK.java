@@ -15,7 +15,7 @@ public class EmployeeUDNPK {
 	@Version
 	private long version;
 
-	@Column(name="CompanyName", nullable = true)
+	@Column(name="CompanyName", nullable = false)
 	private String companyName;
 
 	@Column(name="Name")
