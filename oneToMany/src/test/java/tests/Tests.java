@@ -141,10 +141,12 @@ public class Tests {
 
         EmployeeUDNPK emp1 = new EmployeeUDNPK();
         emp1.setName("Employee 1");
+        emp1.setCompanyName(company.getName());
         company.getEmployees().add(emp1);
 
         EmployeeUDNPK emp2 = new EmployeeUDNPK();
         emp2.setName("Employee 2");
+        emp2.setCompanyName(company.getName());
         company.getEmployees().add(emp2);
 
         EntityTransaction tx = em.getTransaction();
@@ -160,6 +162,16 @@ public class Tests {
 
         Assert.assertEquals(1, companies.size());
         Assert.assertEquals(2, cmp.getEmployees().size());
+
+        EntityTransaction tx2 = em.getTransaction();
+        tx2.begin();
+
+        List<CompanyUDNPK> persistent = em.createQuery("select c from CompanyUDNPK c", CompanyUDNPK.class).getResultList();
+        EntityManager finalEm = em;
+        persistent.forEach(c -> finalEm.remove(c));
+
+        tx2.commit();
+        em.close();
     }
 
     @Test

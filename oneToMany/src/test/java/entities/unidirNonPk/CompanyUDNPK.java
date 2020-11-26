@@ -22,7 +22,7 @@ public class CompanyUDNPK implements Serializable {
 	@Column(name = "Name")
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "CompanyName" ,referencedColumnName = "Name")
 	private Set<EmployeeUDNPK> employees = new HashSet<EmployeeUDNPK>();
 
