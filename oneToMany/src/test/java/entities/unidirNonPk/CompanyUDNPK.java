@@ -19,7 +19,7 @@ public class CompanyUDNPK implements Serializable {
 	@Version
 	private long version;
 
-	@Column(name = "Name")
+	@Column(name = "Name", unique = true)
 	private String name;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
