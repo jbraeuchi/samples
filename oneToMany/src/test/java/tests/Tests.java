@@ -169,6 +169,7 @@ public class Tests {
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
 
+        // cleanup
         em.createQuery("delete from EmployeeUDNPK e where e.companyName = :name").setParameter("name", companyName).executeUpdate();
         em.createQuery("delete from CompanyUDNPK c where c.name = :name").setParameter("name", companyName).executeUpdate();
 
