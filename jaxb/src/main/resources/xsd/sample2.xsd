@@ -1,24 +1,68 @@
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="http://tempuri.org/PurchaseOrderSchema.xsd"
-            targetNamespace="http://tempuri.org/PurchaseOrderSchema.xsd"
-            elementFormDefault="qualified">
-    <xsd:element name="PurchaseOrder" type="tns:PurchaseOrderType"/>
-    <xsd:complexType name="PurchaseOrderType">
-        <xsd:sequence>
-            <xsd:element name="ShipTo" type="tns:USAddress" maxOccurs="2"/>
-            <xsd:element name="BillTo" type="tns:USAddress"/>
-        </xsd:sequence>
-        <xsd:attribute name="OrderDate" type="xsd:date"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="USAddress">
-        <xsd:sequence>
-            <xsd:element name="name"   type="xsd:string"/>
-            <xsd:element name="street" type="xsd:string"/>
-            <xsd:element name="city"   type="xsd:string"/>
-            <xsd:element name="state"  type="xsd:string"/>
-            <xsd:element name="zip"    type="xsd:integer"/>
-        </xsd:sequence>
-        <xsd:attribute name="country" type="xsd:NMTOKEN" fixed="US"/>
-    </xsd:complexType>
-</xsd:schema>
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="recipe"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="recipe">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="meta"/>
+                <xs:element minOccurs="0" ref="recipe_author"/>
+                <xs:element ref="recipe_name"/>
+                <xs:element ref="meal"/>
+                <xs:element ref="ingredients"/>
+                <xs:element ref="directions"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="meta">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="author"/>
+                <xs:element ref="date"/>
+                <xs:element ref="version"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="version" type="xs:string"/>
+    <xs:element name="date" type="xs:string"/>
+    <xs:element name="author" type="xs:string"/>
+    <xs:element name="recipe_author" type="xs:string"/>
+    <xs:element name="recipe_name" type="xs:string"/>
+    <xs:element name="meal" type="xs:string"/>
+    <xs:element name="ingredients">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="item"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="item" type="xs:string"/>
+    <xs:element name="directions">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="para"/>
+                <xs:element ref="bullet"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="bullet">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="strong"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="para">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="strong"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="strong" type="xs:string"/>
+</xs:schema>
