@@ -8,6 +8,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.internal.IlikeAuditExpression;
 import org.hibernate.envers.query.internal.property.EntityPropertyName;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.persistence.*;
@@ -15,6 +16,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Tests {
+    @BeforeClass
+    public static void beforeAll() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx1 = em.getTransaction();
+        tx1.begin();
+
+        em.createQuery("delete from EnvPerson").executeUpdate();
+        em.createQuery("delete from EnvCompany").executeUpdate();
+
+        List<EnvParent> parents = em.createQuery("select e from EnvParent e", EnvParent.class).getResultList();
+        parents.forEach(p -> em.remove(p));
+
+        tx1.commit();
+    }
 
     @Test
     public void test() {
