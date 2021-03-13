@@ -4,6 +4,7 @@ import envers.entities.*;
 import junit.framework.Assert;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.internal.IlikeAuditExpression;
 import org.hibernate.envers.query.internal.property.EntityPropertyName;
@@ -108,7 +109,7 @@ public class Tests {
 
         // Liest ein Revision mit bestimmter Adresse
         AuditQuery aq = ar.createQuery().forEntitiesAtRevision(EnvPerson.class, revisions.get(1));
-        aq.add(new IlikeAuditExpression(new EntityPropertyName("adresse"), "%London%"));
+        aq.add(AuditEntity.property("adresse").like("%London%"));
         List<EnvPerson> res = aq.getResultList();
         System.out.println(res);
 
