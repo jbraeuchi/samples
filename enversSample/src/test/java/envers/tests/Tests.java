@@ -108,22 +108,25 @@ public class Tests {
         System.out.println("*** REV2: " + entities2);
 
         // Liest ein Revision mit bestimmter Adresse
-        AuditQuery aq = ar.createQuery().forEntitiesAtRevision(EnvPerson.class, revisions.get(1));
-        aq.add(AuditEntity.property("adresse").like("%London%"));
+        AuditQuery aq = ar.createQuery()
+                .forEntitiesAtRevision(EnvPerson.class, revisions.get(1))
+                .add(AuditEntity.property("adresse").like("%London%"));
         List<EnvPerson> res = aq.getResultList();
         System.out.println(res);
 
         // Alle Revisions eines Entities
-        AuditQuery aq1 = ar.createQuery().forRevisionsOfEntity(EnvPerson.class, false, false);
-        aq1.add(AuditEntity.id().eq(p1.getId()));
+        AuditQuery aq1 = ar.createQuery()
+                .forRevisionsOfEntity(EnvPerson.class, false, false)
+                .add(AuditEntity.id().eq(p1.getId()));
         List<Object[]> audits = aq1.getResultList();
         audits.forEach(a -> printAudit(a));
 
         // Liest erste Revision mit Adresse like %Fiji%
-        AuditQuery aq2 = ar.createQuery().forRevisionsOfEntity(EnvPerson.class, false, false);
-        aq2.add(AuditEntity.id().eq(p1.getId()));
-        aq2.add(AuditEntity.property("adresse").like("%Fiji%"));
-        aq2.addProjection(AuditEntity.revisionNumber().min());
+        AuditQuery aq2 = ar.createQuery()
+                .forRevisionsOfEntity(EnvPerson.class, false, false)
+                .add(AuditEntity.id().eq(p1.getId()))
+                .add(AuditEntity.property("adresse").like("%Fiji%"))
+                .addProjection(AuditEntity.revisionNumber().min());
         int revFiji = (int) aq2.getSingleResult();
         System.out.println(revFiji);
 
