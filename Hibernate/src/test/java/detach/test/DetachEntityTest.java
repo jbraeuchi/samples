@@ -3,7 +3,7 @@ package detach.test;
 import detach.entity.DetachA;
 import detach.entity.DetachB;
 import detach.entity.DetachC;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -1,6 +1,6 @@
 package usertype.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import usertype.entity.UtEntity;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UTTest {
 
@@ -91,7 +91,7 @@ public class UTTest {
         entity.setBool2(false);
 
         System.out.println(entity);
- //       doInTransaction(em, e -> e.persist(entity));
+        //       doInTransaction(em, e -> e.persist(entity));
 
         UtEntity result = (UtEntity) execInTransaction(em, e -> {
             e.persist(entity);

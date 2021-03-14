@@ -1,11 +1,10 @@
 package nestedEmbeddables.test;
 
-import junit.framework.TestCase;
 import nestedEmbeddables.entity.EmEmbeddableOne;
 import nestedEmbeddables.entity.EmEmbeddableThree;
 import nestedEmbeddables.entity.EmEmbeddableTwo;
 import nestedEmbeddables.entity.EmEntity;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 /**
  * Created by jakob on 24.03.2016.
  */
-public class EmEntityTest extends TestCase {
+public class EmEntityTest {
 
     @Test
     public void testEmbedded() {
