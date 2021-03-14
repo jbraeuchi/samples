@@ -15,22 +15,22 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Tests {
-    @BeforeAll
-    static void beforeAll() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
-        EntityManager em = emf.createEntityManager();
-
-        EntityTransaction tx1 = em.getTransaction();
-        tx1.begin();
-
-        em.createQuery("delete from EnvPerson").executeUpdate();
-        em.createQuery("delete from EnvCompany").executeUpdate();
-
-        List<EnvParent> parents = em.createQuery("select e from EnvParent e", EnvParent.class).getResultList();
-        parents.forEach(p -> em.remove(p));
-
-        tx1.commit();
-    }
+//    @BeforeAll
+//    static void beforeAll() {
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
+//        EntityManager em = emf.createEntityManager();
+//
+//        EntityTransaction tx1 = em.getTransaction();
+//        tx1.begin();
+//
+//        em.createQuery("delete from EnvPerson").executeUpdate();
+//        em.createQuery("delete from EnvCompany").executeUpdate();
+//
+//        List<EnvParent> parents = em.createQuery("select e from EnvParent e", EnvParent.class).getResultList();
+//        parents.forEach(p -> em.remove(p));
+//
+//        tx1.commit();
+//    }
 
     @Test
     public void test() {
@@ -81,27 +81,25 @@ public class Tests {
         EntityManager em = emf.createEntityManager();
 
         // Mr. Bond wird erfasst
-        EnvPerson p1 = new EnvPerson();
-        p1.setName("Bond");
-        p1.setVorname("James");
-        p1.setAdresse("Somewhere in the Bahamas");
-        p1.setGeburtstag(LocalDate.of(1920, 11, 11));
+        EnvPerson mrBond = new EnvPerson();
+        mrBond.setName("Bond");
+        mrBond.setVorname("James");
+        mrBond.setAdresse("Somewhere in the Bahamas");
+        mrBond.setGeburtstag(LocalDate.of(1920, 11, 11));
 
         EntityTransaction tx1 = em.getTransaction();
         tx1.begin();
-        em.persist(p1);
+        em.persist(mrBond);
         tx1.commit();           // A: erste Revision
 
-        long id = p1.getId();
-
         // Mr. Bond reist weiter, Mr. Holmes wird erfasst, IBM wird erfasst
-        EnvPerson p2 = em.find(EnvPerson.class, id);
-        p2.setAdresse("Somewhere in the Fijis");
+        EnvPerson mrBond2 = em.find(EnvPerson.class, mrBond.getId());
+        mrBond2.setAdresse("Somewhere in the Fijis");
 
-        EnvPerson px = new EnvPerson();
-        px.setName("Holmes");
-        px.setVorname("Sherlock");
-        px.setAdresse("221b Baker Street, London");
+        EnvPerson mrHolmes = new EnvPerson();
+        mrHolmes.setName("Holmes");
+        mrHolmes.setVorname("Sherlock");
+        mrHolmes.setAdresse("221b Baker Street, London");
         //      px.setGeburtstag(LocalDate.of(1914, 1, 6));
 
         EnvCompany ibm = new EnvCompany();
@@ -109,13 +107,22 @@ public class Tests {
 
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
-        em.persist(p2);
-        em.persist(px);
+        em.persist(mrBond2);
+        em.persist(mrHolmes);
         em.persist(ibm);
         tx2.commit();           // B: zweite Revision
 
+        // Mr. Bond reist weiter
+        EnvPerson mrBond3 = em.find(EnvPerson.class, mrBond.getId());
+        mrBond2.setAdresse("Somewhere in the Fijis updated");
+
+        EntityTransaction tx3 = em.getTransaction();
+        tx3.begin();
+        em.persist(mrBond3);
+        tx3.commit();
+
         AuditReader ar = AuditReaderFactory.get(em);
-        List<Number> revisions = ar.getRevisions(EnvPerson.class, id);  // alle Revisions
+        List<Number> revisions = ar.getRevisions(EnvPerson.class, mrBond.getId());  // alle Revisions
 
         List<Object> entities1 = ar.getCrossTypeRevisionChangesReader().findEntities(revisions.get(0));
         System.out.println("*** REV1: " + entities1);
@@ -123,33 +130,37 @@ public class Tests {
         List<Object> entities2 = ar.getCrossTypeRevisionChangesReader().findEntities(revisions.get(1));
         System.out.println("*** REV2: " + entities2);
 
+        List<Object> entities3 = ar.getCrossTypeRevisionChangesReader().findEntities(revisions.get(2));
+        System.out.println("*** REV3: " + entities3);
+
         // Liest ein Revision mit bestimmter Adresse
         AuditQuery aq = ar.createQuery()
                 .forEntitiesAtRevision(EnvPerson.class, revisions.get(1))
                 .add(AuditEntity.property("adresse").like("%London%"));
         List<EnvPerson> res = aq.getResultList();
-        System.out.println(res);
+        System.out.println("*** Entity mit Revision und Property: " + res);
 
         // Alle Revisions eines Entities
         AuditQuery aq1 = ar.createQuery()
                 .forRevisionsOfEntity(EnvPerson.class, false, false)
-                .add(AuditEntity.id().eq(p1.getId()));
+                .add(AuditEntity.id().eq(mrBond.getId()));
         List<Object[]> audits = aq1.getResultList();
         audits.forEach(a -> printAudit(a));
 
         // Liest erste Revision mit Adresse like %Fiji%
         AuditQuery aq2 = ar.createQuery()
                 .forRevisionsOfEntity(EnvPerson.class, false, false)
-                .add(AuditEntity.id().eq(p1.getId()))
+                .add(AuditEntity.id().eq(mrBond.getId()))
                 .add(AuditEntity.property("adresse").like("%Fiji%"))
                 .addProjection(AuditEntity.revisionNumber().min());
         int revFiji = (int) aq2.getSingleResult();
-        System.out.println(revFiji);
+        System.out.println("*** Revision eines Changes: " + revFiji);
 
         em.close();
     }
 
     private void printAudit(Object[] audit) {
+        System.out.println("*** AuditEntry: ");
         System.out.println("Entity: " + audit[0]);
         System.out.println("Revision: " + audit[1]);
         System.out.println("Mod: " + audit[2]);
