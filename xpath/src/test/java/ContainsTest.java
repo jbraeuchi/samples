@@ -27,10 +27,13 @@ public class ContainsTest {
         String expr3 = "employees/employee[department/name='Special HR']";
         String expr4 = "employees/employee[contains(department/name,'Special HR')]";
 
+        String expr5 = "employees/employee/department[contains(name,'HR')]";
+
         evaluate(doc, expr1);
         evaluate(doc, expr2);
         evaluate(doc, expr3);
         evaluate(doc, expr4);
+        evaluate(doc, expr5);
     }
 
     private void evaluate(Document doc, String query) throws XPathExpressionException {
@@ -45,7 +48,7 @@ public class ContainsTest {
         System.out.println("Number of Nodes: " + nodeList.getLength());
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node n = nodeList.item(i);
-            System.out.println("Id=" + n.getAttributes().getNamedItem("id").getNodeValue());
+            System.out.println("Node= " + n.getTextContent());
         }
     }
 }
