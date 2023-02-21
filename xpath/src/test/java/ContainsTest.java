@@ -27,13 +27,16 @@ public class ContainsTest {
         String expr3 = "employees/employee[department/name='Special HR']";
         String expr4 = "employees/employee[contains(department/name,'Special HR')]";
 
+        // Contains auf dem untersten Element und dann den Ancestor lesen
         String expr5 = "employees/employee/department[contains(name,'HR')]/ancestor::employee";
+        String expr6 = "//department[contains(name,'HR')]/ancestor::employee";
 
         evaluate(doc, expr1);
         evaluate(doc, expr2);
         evaluate(doc, expr3);
         evaluate(doc, expr4);
         evaluate(doc, expr5);
+        evaluate(doc, expr6);
     }
 
     private void evaluate(Document doc, String query) throws XPathExpressionException {
