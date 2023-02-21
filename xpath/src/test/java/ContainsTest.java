@@ -27,7 +27,7 @@ public class ContainsTest {
         String expr3 = "employees/employee[department/name='Special HR']";
         String expr4 = "employees/employee[contains(department/name,'Special HR')]";
 
-        String expr5 = "employees/employee/department[contains(name,'HR')]";
+        String expr5 = "employees/employee/department[contains(name,'HR')]//ancestor::employee";
 
         evaluate(doc, expr1);
         evaluate(doc, expr2);
