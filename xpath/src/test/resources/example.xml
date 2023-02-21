@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<employees>
+    <employee id="1">
+        <firstName>Lokesh</firstName>
+        <lastName>Gupta</lastName>
+        <department>
+            <id>101</id>
+            <name>IT</name>
+        </department>
+        <department>
+            <id>110</id>
+            <name>Special</name>
+        </department>
+        <department>
+            <id>111</id>
+            <name>Special IT</name>
+        </department>
+    </employee>
+    <employee id="2">
+        <firstName>Brian</firstName>
+        <lastName>Schultz</lastName>
+        <department>
+            <id>102</id>
+            <name>HR</name>
+        </department>
+        <department>
+            <id>110</id>
+            <name>Special</name>
+        </department>
+        <department>
+            <id>112</id>
+            <name>Special HR</name>
+        </department>
+    </employee>
+    <employee id="3">
+        <firstName>Donald</firstName>
+        <lastName>Duck</lastName>
+        <department>
+            <id>122</id>
+            <name>HD</name>
+        </department>
+        <department>
+            <id>102</id>
+            <name>HR</name>
+        </department>
+    </employee>
+</employees>
