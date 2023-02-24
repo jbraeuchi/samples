@@ -2,17 +2,21 @@ package icd;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 class IcdClamlServiceTest {
+    @InjectMocks
     IcdClamlService undertest;
 
     @BeforeEach
     void parseXml() {
-        undertest = new IcdClamlService();
         undertest.parseXml();
     }
 
