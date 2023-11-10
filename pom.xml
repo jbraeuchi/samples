@@ -14,7 +14,7 @@
         <module>java8</module>
         <module>jaxb</module>
         <module>Hibernate</module>
-        <module>jsonPath</module>
+        <module>jsonpath</module>
         <module>xpath</module>
         <module>oneToMany</module>
     </modules>
