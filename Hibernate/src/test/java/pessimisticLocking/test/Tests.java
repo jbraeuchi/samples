@@ -5,19 +5,23 @@ import org.junit.jupiter.api.Test;
 import pessimisticLocking.entity.PlEntity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 
 public class Tests {
 
     EntityManager em;
     EntityManager em2;
+
+    List<String> log = new ArrayList();
 
     @BeforeEach
     public void init() {
@@ -71,32 +75,32 @@ public class Tests {
         });
 
         Runnable r1 = () -> {
-            System.out.println("Starting 1 ...");
-            doInTransaction(em , (e) -> {
-                System.out.println("Reading 1 ...");
+            log("Starting 1 ...");
+            doInTransaction(em, (e) -> {
+                log("Reading 1 ...");
                 PlEntity entity = e.find(PlEntity.class, entity1.getId(), LockModeType.PESSIMISTIC_WRITE);
-                System.out.println("Reading 1 finished");
+                log("Reading 1 finished");
 
                 entity.setName1("E1 name runnable 1");
                 sleep(3000);
-                System.out.println("Tx 1 finished");
+                log("Tx 1 finished");
             });
-            System.out.println("Finished 1");
+            log("Finished 1");
         };
 
         Runnable r2 = () -> {
-            System.out.println("Starting 2 ...");
-            doInTransaction(em2 , (e) -> {
+            log("Starting 2 ...");
+            doInTransaction(em2, (e) -> {
                 sleep(500);
 
-                System.out.println("Reading 2 ...");
+                log("Reading 2 ...");
                 PlEntity entity = e.find(PlEntity.class, entity1.getId(), LockModeType.PESSIMISTIC_WRITE);
-                System.out.println("Reading 2 finished, after Tx1 finished");
+                log("Reading 2 finished"); // should come after Tx1 finished because of LOCK
 
                 entity.setName1("E1 name runnable 2");
-                System.out.println("Tx 2 finished");
+                log("Tx 2 finished");
             });
-            System.out.println("Finished 2");
+            log("Finished 2");
         };
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -110,6 +114,9 @@ public class Tests {
         });
 
         System.out.println(result);
+
+        String logString = log.stream().collect(Collectors.joining("\n"));
+        System.out.println(logString);
     }
 
     void doInTransaction(EntityManager em, Consumer<EntityManager> consumer) {
@@ -135,5 +142,11 @@ public class Tests {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    void log(String msg) {
+        String threadName = Thread.currentThread().getName();
+        LocalDateTime now = LocalDateTime.now();
+        this.log.add(threadName + ": " + now + ": " + msg);
     }
 }
