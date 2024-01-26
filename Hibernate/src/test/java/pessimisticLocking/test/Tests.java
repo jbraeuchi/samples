@@ -1,5 +1,6 @@
 package pessimisticLocking.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pessimisticLocking.entity.PlEntity;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,16 +17,20 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class Tests {
 
     EntityManager em;
     EntityManager em2;
 
-    List<String> log = new ArrayList();
+    List<String> log;
 
     @BeforeEach
     public void init() {
+        log = new CopyOnWriteArrayList();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
         em = emf.createEntityManager();
         em2 = emf.createEntityManager();
@@ -60,7 +66,7 @@ public class Tests {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testConcurrentUpdate() throws Exception {
         PlEntity entity1 = new PlEntity();
         entity1.setName1("E1 name1");
         entity1.setName2("E1 name2");
@@ -82,7 +88,7 @@ public class Tests {
                 log("Reading 1 finished");
 
                 entity.setName1("E1 name runnable 1");
-                sleep(3000);
+                sleep(3000);  // simulate slow Transaction
                 log("Tx 1 finished");
             });
             log("Finished 1");
@@ -91,7 +97,7 @@ public class Tests {
         Runnable r2 = () -> {
             log("Starting 2 ...");
             doInTransaction(em2, (e) -> {
-                sleep(500);
+                sleep(500);  // Wait before reading
 
                 log("Reading 2 ...");
                 PlEntity entity = e.find(PlEntity.class, entity1.getId(), LockModeType.PESSIMISTIC_WRITE);
@@ -117,6 +123,16 @@ public class Tests {
 
         String logString = log.stream().collect(Collectors.joining("\n"));
         System.out.println(logString);
+
+        assertEquals(10, log.size());
+        assertTrue(log.get(2).contains("Reading 1 ..."));
+        assertTrue(log.get(3).contains("Reading 1 finished"));
+        assertTrue(log.get(4).contains("Reading 2 ..."));
+        assertTrue(log.get(5).contains("Tx 1 finished"));
+        assertTrue(log.get(6).contains("Reading 2 finished"));  // Reading 2 waits for end of TX1
+        assertTrue(log.get(7).contains("Tx 2 finished"));
+        assertTrue(log.get(8).contains("Finished 1"));
+        assertTrue(log.get(9).contains("Finished 2"));
     }
 
     void doInTransaction(EntityManager em, Consumer<EntityManager> consumer) {
