@@ -71,15 +71,14 @@ public class Tests {
     }
 
     @Test
-    public void testConcurrentUpdate() throws Exception {
-
-        // Tx 1 locks the entity
+    public void testConcurrentUpdate_pessimistic_write() throws Exception {
+        // Tx 1 locks the entity, force serialization
         Runnable r1 = () ->
-                updateEntity(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
+                updateEntityInTx(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
 
         // Tx 2 reading waits for end of Tx 1, use different EntityManager !
         Runnable r2 = () ->
-                updateEntity(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
+                updateEntityInTx(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.submit(r1);
@@ -105,7 +104,75 @@ public class Tests {
         assertTrue(log.get(7).contains("Tx 2 finished"));
     }
 
-    void updateEntity(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
+    @Test
+    public void testConcurrentRead_pessimistic_write() throws Exception {
+        // Tx 1 locks the entity, force serialization
+        Runnable r1 = () ->
+                readEntityInTx(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
+
+        // Tx 2 reading waits for end of Tx 1, use different EntityManager !
+        Runnable r2 = () ->
+                readEntityInTx(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        executorService.submit(r1);
+        executorService.submit(r2);
+        executorService.awaitTermination(6, TimeUnit.SECONDS);
+
+        List<PlEntity> result = doInTransaction(em, (e) -> {
+            return e.createQuery("select p from PlEntity p", PlEntity.class)
+                    .getResultList();
+        });
+
+        System.out.println(result);
+
+        String logString = log.stream().collect(Collectors.joining("\n"));
+        System.out.println(logString);
+
+        assertEquals(8, log.size());
+        assertTrue(log.get(2).contains("Tx 1 start reading ..."));
+        assertTrue(log.get(3).contains("Tx 1 reading finished"));
+        assertTrue(log.get(4).contains("Tx 2 start reading ..."));
+        assertTrue(log.get(5).contains("Tx 1 finished"));
+        assertTrue(log.get(6).contains("Tx 2 reading finished")); // Reading 2 waits for end of Tx 1
+        assertTrue(log.get(7).contains("Tx 2 finished"));
+    }
+
+    @Test
+    public void testConcurrentUpdate_pessimistic_read() throws Exception {
+        // Tx 1 locks the entity, no serialization
+        Runnable r1 = () ->
+                updateEntityInTx(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_READ);
+
+        // Tx 2 locks the same entity, use different EntityManager !
+        Runnable r2 = () ->
+                updateEntityInTx(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_READ);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        executorService.submit(r1);
+        executorService.submit(r2);
+        executorService.awaitTermination(6, TimeUnit.SECONDS);
+
+        List<PlEntity> result = doInTransaction(em, (e) -> {
+            return e.createQuery("select p from PlEntity p", PlEntity.class)
+                    .getResultList();
+        });
+
+        System.out.println(result);
+
+        String logString = log.stream().collect(Collectors.joining("\n"));
+        System.out.println(logString);
+
+        assertEquals(8, log.size());
+        assertTrue(log.get(2).contains("Tx 1 start reading ..."));
+        assertTrue(log.get(3).contains("Tx 1 reading finished"));
+        assertTrue(log.get(4).contains("Tx 2 start reading ..."));
+        assertTrue(log.get(5).contains("Tx 2 reading finished"));  // starts befor Tx 1 has finished
+        assertTrue(log.get(6).contains("Tx 2 finished"));
+        assertTrue(log.get(7).contains("Tx 1 finished"));
+    }
+
+    void updateEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
         doInTransaction(entityManager, (e) -> {
             log(txName + " starting ...");
             sleep(delayBefore);  // Wait before reading
@@ -115,6 +182,20 @@ public class Tests {
             log(txName + " reading finished");
 
             entity.setName("name updated by " + txName);
+
+            sleep(delayAfter);  // Simulate long Tx
+            log(txName + " finished");
+        });
+    }
+
+    void readEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
+        doInTransaction(entityManager, (e) -> {
+            log(txName + " starting ...");
+            sleep(delayBefore);  // Wait before reading
+
+            log(txName + " start reading ...");
+            PlEntity entity = e.find(PlEntity.class, entityId, lockMode);
+            log(txName + " reading finished");
 
             sleep(delayAfter);  // Simulate long Tx
             log(txName + " finished");
