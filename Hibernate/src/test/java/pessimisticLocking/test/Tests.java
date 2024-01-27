@@ -74,14 +74,12 @@ public class Tests {
     public void testConcurrentUpdate() throws Exception {
 
         // Tx 1 locks the entity
-        Runnable r1 = () -> doInTransaction(em, (e) -> {
-            updateEntity(e, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
-        });
+        Runnable r1 = () ->
+                updateEntity(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
 
         // Tx 2 reading waits for end of Tx 1, use different EntityManager !
-        Runnable r2 = () -> doInTransaction(em2, (e) -> {
-            updateEntity(e, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
-        });
+        Runnable r2 = () ->
+                updateEntity(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.submit(r1);
@@ -108,17 +106,19 @@ public class Tests {
     }
 
     void updateEntity(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
-        log(txName + " starting ...");
-        sleep(delayBefore);  // Wait before reading
+        doInTransaction(entityManager, (e) -> {
+            log(txName + " starting ...");
+            sleep(delayBefore);  // Wait before reading
 
-        log(txName + " start reading ...");
-        PlEntity entity = entityManager.find(PlEntity.class, entityId, lockMode);
-        log(txName + " reading finished");
+            log(txName + " start reading ...");
+            PlEntity entity = e.find(PlEntity.class, entityId, lockMode);
+            log(txName + " reading finished");
 
-        entity.setName("name updated by " + txName);
+            entity.setName("name updated by " + txName);
 
-        sleep(delayAfter);  // Simulate long Tx
-        log(txName + " finished");
+            sleep(delayAfter);  // Simulate long Tx
+            log(txName + " finished");
+        });
     }
 
     void doInTransaction(EntityManager em, Consumer<EntityManager> consumer) {
