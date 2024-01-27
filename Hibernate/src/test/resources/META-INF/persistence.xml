@@ -5,11 +5,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- All persistence classes must be listed -->
-        <class>nestedEmbeddables.entity.EmEntity</class>
-
-        <class>detach.entity.DetachA</class>
-        <class>detach.entity.DetachB</class>
-        <class>detach.entity.DetachC</class>
+        <!-- <class>nestedEmbeddables.entity.EmEntity</class>-->
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
@@ -21,8 +17,7 @@
 
             <property name="hibernate.archive.autodetection" value="class"/>
 
-            <property name="javax.persistence.schema-generation.database.action"
-                      value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
         </properties>
 
     </persistence-unit>

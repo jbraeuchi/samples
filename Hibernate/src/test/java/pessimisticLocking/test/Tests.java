@@ -6,7 +6,9 @@ import pessimisticLocking.entity.PlEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -189,12 +191,18 @@ public class Tests {
     }
 
     void readEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.lock.timeout", 100);
+        hints.put("javax.persistence.query.timeout", 100);
+        hints.put("jakarta.persistence.lock.timeout", 100);
+        hints.put("jakarta.persistence.query.timeout", 100);
+
         doInTransaction(entityManager, (e) -> {
             log(txName + " starting ...");
             sleep(delayBefore);  // Wait before reading
 
             log(txName + " start reading ...");
-            PlEntity entity = e.find(PlEntity.class, entityId, lockMode);
+            PlEntity entity = e.find(PlEntity.class, entityId, lockMode, hints);
             log(txName + " reading finished");
 
             sleep(delayAfter);  // Simulate long Tx
