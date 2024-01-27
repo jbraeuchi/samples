@@ -191,7 +191,7 @@ public class Tests {
     }
 
     void readEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
-        // Lock Timeout, does not work here
+        // Lock Timeout, does not work with MySQL
         Map<String, Object> hints = new HashMap<>();
         hints.put("javax.persistence.lock.timeout", 100);
         hints.put("javax.persistence.query.timeout", 100);
