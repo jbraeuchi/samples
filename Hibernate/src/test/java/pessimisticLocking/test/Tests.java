@@ -26,9 +26,23 @@ public class Tests {
 
     List<String> log;
 
+    PlEntity entity1;
+    PlEntity entity2;
+    PlEntity entity3;
+
     @BeforeEach
     public void init() {
+        entity1 = new PlEntity();
+        entity1.setName("E1 name");
+
+        entity2 = new PlEntity();
+        entity2.setName("E2 name");
+
+        entity3 = new PlEntity();
+        entity3.setName("E3 name");
+
         log = new CopyOnWriteArrayList();
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
         em = emf.createEntityManager();
         em2 = emf.createEntityManager();
@@ -36,23 +50,15 @@ public class Tests {
         doInTransaction(em, (e) -> {
             Query q = e.createQuery("delete from PlEntity");
             q.executeUpdate();
+
+            e.persist(entity1);
+            e.persist(entity2);
+            e.persist(entity3);
         });
     }
 
     @Test
-    public void testCreate() {
-        PlEntity entity1 = new PlEntity();
-        entity1.setName1("E1 name1");
-        entity1.setName2("E1 name2");
-
-        PlEntity entity2 = new PlEntity();
-        entity2.setName1("E2 name1");
-        entity2.setName2("E2 name2");
-
-        doInTransaction(em, (e) -> {
-            e.persist(entity1);
-            e.persist(entity2);
-        });
+    public void testRead() {
 
         List<PlEntity> result = doInTransaction(em, (e) -> {
             return e.createQuery("select p from PlEntity p", PlEntity.class)
@@ -60,23 +66,12 @@ public class Tests {
                     .getResultList();
         });
 
+        assertEquals(3, result.size());
         System.out.println(result);
     }
 
     @Test
     public void testConcurrentUpdate() throws Exception {
-        PlEntity entity1 = new PlEntity();
-        entity1.setName1("E1 name1");
-        entity1.setName2("E1 name2");
-
-        PlEntity entity2 = new PlEntity();
-        entity2.setName1("E2 name1");
-        entity2.setName2("E2 name2");
-
-        doInTransaction(em, (e) -> {
-            e.persist(entity1);
-            e.persist(entity2);
-        });
 
         // Tx 1 locks the entity
         Runnable r1 = () -> doInTransaction(em, (e) -> {
@@ -120,7 +115,7 @@ public class Tests {
         PlEntity entity = entityManager.find(PlEntity.class, entityId, lockMode);
         log(txName + " reading finished");
 
-        entity.setName1(txName + "name updated");
+        entity.setName("name updated by " + txName);
 
         sleep(delayAfter);  // Simulate long Tx
         log(txName + " finished");

@@ -11,8 +11,7 @@ public class PlEntity {
     @Id
     @GeneratedValue
     private long id;
-    private String name1;
-    private String name2;
+    private String name;
 
     public long getId() {
         return id;
@@ -22,28 +21,19 @@ public class PlEntity {
         this.id = id;
     }
 
-    public String getName1() {
-        return name1;
+    public String getName() {
+        return name;
     }
 
-    public void setName1(String name1) {
-        this.name1 = name1;
-    }
-
-    public String getName2() {
-        return name2;
-    }
-
-    public void setName2(String name2) {
-        this.name2 = name2;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "PlEntity{" +
                 "id=" + id +
-                ", name1='" + name1 + '\'' +
-                ", name2='" + name2 + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
