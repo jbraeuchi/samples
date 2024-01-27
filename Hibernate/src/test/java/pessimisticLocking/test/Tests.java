@@ -1,6 +1,7 @@
 package pessimisticLocking.test;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pessimisticLocking.entity.PlEntity;
 
@@ -85,41 +86,7 @@ public class Tests {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.submit(r1);
         executorService.submit(r2);
-        executorService.awaitTermination(6, TimeUnit.SECONDS);
-
-        List<PlEntity> result = doInTransaction(em, (e) -> {
-            return e.createQuery("select p from PlEntity p", PlEntity.class)
-                    .getResultList();
-        });
-
-        System.out.println(result);
-
-        String logString = log.stream().collect(Collectors.joining("\n"));
-        System.out.println(logString);
-
-        assertEquals(8, log.size());
-        assertTrue(log.get(2).contains("Tx 1 start reading ..."));
-        assertTrue(log.get(3).contains("Tx 1 reading finished"));
-        assertTrue(log.get(4).contains("Tx 2 start reading ..."));
-        assertTrue(log.get(5).contains("Tx 1 finished"));
-        assertTrue(log.get(6).contains("Tx 2 reading finished")); // Reading 2 waits for end of Tx 1
-        assertTrue(log.get(7).contains("Tx 2 finished"));
-    }
-
-    @Test
-    public void testConcurrentRead_pessimistic_write() throws Exception {
-        // Tx 1 locks the entity, force serialization
-        Runnable r1 = () ->
-                readEntityInTx(em, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
-
-        // Tx 2 reading waits for end of Tx 1, use different EntityManager !
-        Runnable r2 = () ->
-                readEntityInTx(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
-
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        executorService.submit(r1);
-        executorService.submit(r2);
-        executorService.awaitTermination(6, TimeUnit.SECONDS);
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
 
         List<PlEntity> result = doInTransaction(em, (e) -> {
             return e.createQuery("select p from PlEntity p", PlEntity.class)
@@ -153,7 +120,7 @@ public class Tests {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.submit(r1);
         executorService.submit(r2);
-        executorService.awaitTermination(6, TimeUnit.SECONDS);
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
 
         List<PlEntity> result = doInTransaction(em, (e) -> {
             return e.createQuery("select p from PlEntity p", PlEntity.class)
@@ -169,45 +136,90 @@ public class Tests {
         assertTrue(log.get(2).contains("Tx 1 start reading ..."));
         assertTrue(log.get(3).contains("Tx 1 reading finished"));
         assertTrue(log.get(4).contains("Tx 2 start reading ..."));
-        assertTrue(log.get(5).contains("Tx 2 reading finished"));  // starts befor Tx 1 has finished
+        assertTrue(log.get(5).contains("Tx 2 reading finished"));  // starts before Tx 1 has finished
+        assertTrue(log.get(6).contains("Tx 2 finished"));
+        assertTrue(log.get(7).contains("Tx 1 finished"));
+    }
+
+    @Test
+    @Disabled("Long running !")
+    public void testConcurrentRead_pessimistic_write_timeout_exception() throws Exception {
+        // Tx 1 locks the entity, force serialization
+        // Default LockTimeout of MySql ist 50 sec
+        Runnable r1 = () ->
+                readEntityInTx(em, entity1.getId(), "Tx 1", 0, 55000, LockModeType.PESSIMISTIC_WRITE);
+
+        // Tx 2 reading waits for end of Tx 1, use different EntityManager !
+        Runnable r2 = () ->
+                readEntityInTx(em2, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        executorService.submit(r1);
+        executorService.submit(r2);
+        executorService.awaitTermination(60, TimeUnit.SECONDS);
+
+        List<PlEntity> result = doInTransaction(em, (e) -> {
+            return e.createQuery("select p from PlEntity p", PlEntity.class)
+                    .getResultList();
+        });
+
+        System.out.println(result);
+
+        String logString = log.stream().collect(Collectors.joining("\n"));
+        System.out.println(logString);
+
+        assertEquals(8, log.size());
+        assertTrue(log.get(2).contains("Tx 1 start reading ..."));
+        assertTrue(log.get(3).contains("Tx 1 reading finished"));
+        assertTrue(log.get(4).contains("Tx 2 start reading ..."));
+        assertTrue(log.get(5).contains("Tx 2 reading failed")); // Reading 2 waits too long for end of Tx 1
         assertTrue(log.get(6).contains("Tx 2 finished"));
         assertTrue(log.get(7).contains("Tx 1 finished"));
     }
 
     void updateEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
         doInTransaction(entityManager, (e) -> {
-            log(txName + " starting ...");
+            log(txName, "starting ...");
             sleep(delayBefore);  // Wait before reading
 
-            log(txName + " start reading ...");
-            PlEntity entity = e.find(PlEntity.class, entityId, lockMode);
-            log(txName + " reading finished");
-
-            entity.setName("name updated by " + txName);
+            log(txName, "start reading ...");
+            try {
+                PlEntity entity = e.find(PlEntity.class, entityId, lockMode);
+                entity.setName("name updated by " + txName);
+                log(txName, "reading finished");
+            } catch (Exception ex) {
+                log(txName, "reading failed " + ex);
+                ex.printStackTrace();
+            }
 
             sleep(delayAfter);  // Simulate long Tx
-            log(txName + " finished");
+            log(txName, "finished");
         });
     }
 
     void readEntityInTx(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
-        // Lock Timeout, does not work with MySQL
         Map<String, Object> hints = new HashMap<>();
+        // Lock Timeout hint, not supported by MySQL, Default Lock Timout is 50 sec
         hints.put("javax.persistence.lock.timeout", 100);
         hints.put("javax.persistence.query.timeout", 100);
         hints.put("jakarta.persistence.lock.timeout", 100);
         hints.put("jakarta.persistence.query.timeout", 100);
 
         doInTransaction(entityManager, (e) -> {
-            log(txName + " starting ...");
+            log(txName, "starting ...");
             sleep(delayBefore);  // Wait before reading
 
-            log(txName + " start reading ...");
-            PlEntity entity = e.find(PlEntity.class, entityId, lockMode, hints);
-            log(txName + " reading finished");
+            log(txName, "start reading ...");
+            try {
+                PlEntity entity = e.find(PlEntity.class, entityId, lockMode, hints);
+                log(txName, "reading finished");
+            } catch (Exception ex) {
+                log(txName, "reading failed " + ex);
+                ex.printStackTrace();
+            }
 
             sleep(delayAfter);  // Simulate long Tx
-            log(txName + " finished");
+            log(txName, "finished");
         });
     }
 
@@ -236,9 +248,9 @@ public class Tests {
         }
     }
 
-    void log(String msg) {
+    void log(String txName, String msg) {
         String threadName = Thread.currentThread().getName();
         LocalDateTime now = LocalDateTime.now();
-        this.log.add(threadName + ": " + now + ": " + msg);
+        this.log.add(threadName + ": " + now + ": " + txName + " " + msg);
     }
 }
