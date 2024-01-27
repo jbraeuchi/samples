@@ -1,13 +1,11 @@
 package pessimisticLocking.test;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pessimisticLocking.entity.PlEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -80,34 +78,15 @@ public class Tests {
             e.persist(entity2);
         });
 
-        Runnable r1 = () -> {
-            log("Starting 1 ...");
-            doInTransaction(em, (e) -> {
-                log("Reading 1 ...");
-                PlEntity entity = e.find(PlEntity.class, entity1.getId(), LockModeType.PESSIMISTIC_WRITE);
-                log("Reading 1 finished");
+        // Tx 1 locks the entity
+        Runnable r1 = () -> doInTransaction(em, (e) -> {
+            updateEntity(e, entity1.getId(), "Tx 1", 0, 3000, LockModeType.PESSIMISTIC_WRITE);
+        });
 
-                entity.setName1("E1 name runnable 1");
-                sleep(3000);  // simulate slow Transaction
-                log("Tx 1 finished");
-            });
-            log("Finished 1");
-        };
-
-        Runnable r2 = () -> {
-            log("Starting 2 ...");
-            doInTransaction(em2, (e) -> {
-                sleep(500);  // Wait before reading
-
-                log("Reading 2 ...");
-                PlEntity entity = e.find(PlEntity.class, entity1.getId(), LockModeType.PESSIMISTIC_WRITE);
-                log("Reading 2 finished"); // should come after Tx1 finished because of LOCK
-
-                entity.setName1("E1 name runnable 2");
-                log("Tx 2 finished");
-            });
-            log("Finished 2");
-        };
+        // Tx 2 reading waits for end of Tx 1, use different EntityManager !
+        Runnable r2 = () -> doInTransaction(em2, (e) -> {
+            updateEntity(e, entity1.getId(), "Tx 2", 500, 0, LockModeType.PESSIMISTIC_WRITE);
+        });
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.submit(r1);
@@ -124,15 +103,27 @@ public class Tests {
         String logString = log.stream().collect(Collectors.joining("\n"));
         System.out.println(logString);
 
-        assertEquals(10, log.size());
-        assertTrue(log.get(2).contains("Reading 1 ..."));
-        assertTrue(log.get(3).contains("Reading 1 finished"));
-        assertTrue(log.get(4).contains("Reading 2 ..."));
+        assertEquals(8, log.size());
+        assertTrue(log.get(2).contains("Tx 1 start reading ..."));
+        assertTrue(log.get(3).contains("Tx 1 reading finished"));
+        assertTrue(log.get(4).contains("Tx 2 start reading ..."));
         assertTrue(log.get(5).contains("Tx 1 finished"));
-        assertTrue(log.get(6).contains("Reading 2 finished"));  // Reading 2 waits for end of TX1
+        assertTrue(log.get(6).contains("Tx 2 reading finished")); // Reading 2 waits for end of Tx 1
         assertTrue(log.get(7).contains("Tx 2 finished"));
-        assertTrue(log.get(8).contains("Finished 1"));
-        assertTrue(log.get(9).contains("Finished 2"));
+    }
+
+    void updateEntity(EntityManager entityManager, long entityId, String txName, int delayBefore, int delayAfter, LockModeType lockMode) {
+        log(txName + " starting ...");
+        sleep(delayBefore);  // Wait before reading
+
+        log(txName + " start reading ...");
+        PlEntity entity = entityManager.find(PlEntity.class, entityId, lockMode);
+        log(txName + " reading finished");
+
+        entity.setName1(txName + "name updated");
+
+        sleep(delayAfter);  // Simulate long Tx
+        log(txName + " finished");
     }
 
     void doInTransaction(EntityManager em, Consumer<EntityManager> consumer) {
