@@ -1,4 +1,4 @@
-package detach.test;
+package detach;
 
 import detach.entity.DetachA;
 import detach.entity.DetachB;

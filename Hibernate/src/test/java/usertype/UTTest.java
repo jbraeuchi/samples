@@ -1,4 +1,4 @@
-package usertype.test;
+package usertype;
 
 import org.junit.jupiter.api.Test;
 import usertype.entity.UtEntity;

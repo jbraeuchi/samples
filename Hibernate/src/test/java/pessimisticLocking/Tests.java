@@ -1,4 +1,4 @@
-package pessimisticLocking.test;
+package pessimisticLocking;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
