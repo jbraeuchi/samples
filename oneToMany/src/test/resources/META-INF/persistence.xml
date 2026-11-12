@@ -9,20 +9,20 @@
 		<class>entities.bidir.CompanyBD</class>
 		<class>entities.bidir.EmployeeBD</class>
 
-		<class>entities.bidir.CompanyBD2</class>
-		<class>entities.bidir.EmployeeBD2</class>
+		<class>entities.bidir2.CompanyBD2</class>
+		<class>entities.bidir2.EmployeeBD2</class>
 
-		<class>entities.bidir.CompanyBD3</class>
-		<class>entities.bidir.EmployeeBD3</class>
+		<class>entities.bidir3.CompanyBD3</class>
+		<class>entities.bidir3.EmployeeBD3</class>
 
-		<class>entities.bidir.CompanyEB</class>
-		<class>entities.bidir.EmplroyeeEB</class>
+		<class>entities.embed.CompanyEB</class>
+		<class>entities.embed.EmplroyeeEB</class>
 
-		<class>entities.bidir.CompanyEB2</class>
-		<class>entities.bidir.EmployeeEB2</class>
+		<class>entities.embed2.CompanyEB2</class>
+		<class>entities.embed2.EmployeeEB2</class>
 
-		<class>entities.bidir.CompanyEG</class>
-		<class>entities.bidir.EmployeeEG</class>
+		<class>entities.entitygraph.CompanyEG</class>
+		<class>entities.entitygraph.EmployeeEG</class>
 
 		<class>entities.unidir.CompanyUD</class>
 		<class>entities.unidir.EmployeeUD</class>
