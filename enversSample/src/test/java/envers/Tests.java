@@ -1,4 +1,4 @@
-package envers.tests;
+package envers;
 
 import envers.entities.*;
 import org.hibernate.envers.AuditReader;
