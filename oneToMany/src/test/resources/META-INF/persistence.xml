@@ -7,22 +7,22 @@
 		<!-- All persistence classes must be listed -->
 
 		<class>entities.bidir.CompanyBD</class>
-		<class>entities.bidir.EmplyeeBD</class>
+		<class>entities.bidir.EmployeeBD</class>
 
 		<class>entities.bidir.CompanyBD2</class>
-		<class>entities.bidir.EmplyeeBD2</class>
+		<class>entities.bidir.EmployeeBD2</class>
 
 		<class>entities.bidir.CompanyBD3</class>
-		<class>entities.bidir.EmplyeeBD3</class>
+		<class>entities.bidir.EmployeeBD3</class>
 
 		<class>entities.bidir.CompanyEB</class>
-		<class>entities.bidir.EmplyeeEB</class>
+		<class>entities.bidir.EmplroyeeEB</class>
 
 		<class>entities.bidir.CompanyEB2</class>
-		<class>entities.bidir.EmplyeeEB2</class>
+		<class>entities.bidir.EmployeeEB2</class>
 
 		<class>entities.bidir.CompanyEG</class>
-		<class>entities.bidir.EmplyeeEG</class>
+		<class>entities.bidir.EmployeeEG</class>
 
 		<class>entities.unidir.CompanyUD</class>
 		<class>entities.unidir.EmployeeUD</class>
