@@ -6,12 +6,31 @@
 
 		<!-- All persistence classes must be listed -->
 
+		<class>entities.bidir.CompanyBD</class>
+		<class>entities.bidir.EmplyeeBD</class>
+
+		<class>entities.bidir.CompanyBD2</class>
+		<class>entities.bidir.EmplyeeBD2</class>
+
+		<class>entities.bidir.CompanyBD3</class>
+		<class>entities.bidir.EmplyeeBD3</class>
+
+		<class>entities.bidir.CompanyEB</class>
+		<class>entities.bidir.EmplyeeEB</class>
+
+		<class>entities.bidir.CompanyEB2</class>
+		<class>entities.bidir.EmplyeeEB2</class>
+
+		<class>entities.bidir.CompanyEG</class>
+		<class>entities.bidir.EmplyeeEG</class>
+
 		<class>entities.unidir.CompanyUD</class>
 		<class>entities.unidir.EmployeeUD</class>
 
 		<class>entities.unidirNonPk.CompanyUDNPK</class>
 		<class>entities.unidirNonPk.EmployeeUDNPK</class>
 
+	
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
 
