@@ -81,6 +81,5 @@ public class EmEntityTest {
         o3.setDate(LocalDate.now());
         e1db.getManyOnes().add(o3);
         tx2.commit();
-        
     }
 }
