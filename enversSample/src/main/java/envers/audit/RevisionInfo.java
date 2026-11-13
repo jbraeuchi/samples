@@ -3,24 +3,29 @@ package envers.audit;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Convert;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
+import org.hibernate.envers.RevisionMapping;
+import org.hibernate.type.descriptor.jdbc.VarcharUUIDJdbcType;
 
 @Entity
 @RevisionEntity
 //@RevisionEntity(RevisionInfoListener.class)
 // or set org.hibernate.envers.revision_listener
 @Table(name = "ENV_REVINFO")
-public class RevisionInfo extends DefaultRevisionEntity {
+public class RevisionInfo extends RevisionMapping {
     private String createdBy;
-
-    @Type(type = "org.hibernate.type.UUIDCharType")
+    
+    // @Type(type = "org.hibernate.type.UUIDCharType")
+    @JdbcType(VarcharUUIDJdbcType.class)
     private UUID createdCallcontexId;
 
     public String getCreatedBy() {
@@ -52,9 +57,5 @@ public class RevisionInfo extends DefaultRevisionEntity {
     public void setCreatedCallcontexId(UUID createdCallcontexId) {
         this.createdCallcontexId = createdCallcontexId;
     }
-
-
-
-
 
 }

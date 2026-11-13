@@ -1,6 +1,6 @@
 package envers.entities;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 /**
  * Created by jakob on 17.03.2016.
