@@ -48,6 +48,7 @@ public class EmEntityTest {
         tx1.commit();
     }
 
+    @Test
     public void testEmbedded_udate() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TEST");
         EntityManager em = emf.createEntityManager();
