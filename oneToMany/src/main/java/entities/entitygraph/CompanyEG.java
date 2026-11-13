@@ -1,6 +1,6 @@
 package entities.entitygraph;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

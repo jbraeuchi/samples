@@ -2,7 +2,7 @@ package entities.entitygraph;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Audited

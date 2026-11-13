@@ -2,7 +2,7 @@ package entities.unidirNonPk;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "O2M_EmployeeUD_NPK")

@@ -1,7 +1,6 @@
 package entities.embed;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.*;
 
 /**
  * Created by jakob on 23.11.2015.

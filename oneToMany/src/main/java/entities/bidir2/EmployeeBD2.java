@@ -2,7 +2,7 @@ package entities.bidir2;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Audited

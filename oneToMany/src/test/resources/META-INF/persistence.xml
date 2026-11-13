@@ -32,15 +32,17 @@
 
 	
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
+           <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
 
-			<property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/test?serverTimezone=Europe/Zurich"/>
-			<property name="javax.persistence.jdbc.user" value="test"/>
-			<property name="javax.persistence.jdbc.password" value="test"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/test?serverTimezone=Europe/Zurich"/>
+            <property name="jakarta.persistence.jdbc.user" value="test"/>
+            <property name="jakarta.persistence.jdbc.password" value="test"/>
+
 
 			<property name="hibernate.archive.autodetection" value="class"/>
 
-			<property name="javax.persistence.schema-generation.database.action"
+			<property name="jakarta.persistence.schema-generation.database.action"
 					  value="drop-and-create"/>
 		</properties>
 

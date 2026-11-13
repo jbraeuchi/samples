@@ -2,7 +2,7 @@ package entities.embed;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
