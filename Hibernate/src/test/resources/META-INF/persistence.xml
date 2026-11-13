@@ -5,7 +5,18 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- All persistence classes must be listed -->
-        <!-- <class>nestedEmbeddables.entity.EmEntity</class>-->
+        <class>detach.entity.DetachA</class>
+        <class>detach.entity.DetachB</class>
+        <class>detach.entity.DetachC</class>
+
+        <class>elementcollection.EcEntity</class>
+        <class>elementcollection.Element</class>
+
+        <class>nestedEmbeddables.entity.EmEntity</class>
+
+        <class>pessimisticLocking.entity.PlEntity</class>
+
+        <class>usertype.entity.UtEntity</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
