@@ -4,14 +4,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.JdbcType;
-import org.hibernate.annotations.Type;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionMapping;
 import org.hibernate.type.descriptor.jdbc.VarcharUUIDJdbcType;
