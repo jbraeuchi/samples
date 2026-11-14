@@ -16,8 +16,9 @@ import entities.unidir.CompanyUD;
 import entities.unidir.EmployeeUD;
 import entities.unidirNonPk.CompanyUDNPK;
 import entities.unidirNonPk.EmployeeUDNPK;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -53,9 +54,9 @@ public class Tests {
         List<CompanyBD> companies = qp.getResultList();
         CompanyBD cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(null, companies.get(0).getManager());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(null, companies.get(0).getManager());
 
         // Add The Boss
         tx = em.getTransaction();
@@ -74,9 +75,9 @@ public class Tests {
         companies = qp.getResultList();
         cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(3, cmp.getEmployees().size());
-        Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+        assertEquals(1, companies.size());
+        assertEquals(3, cmp.getEmployees().size());
+        assertEquals("The Boss", companies.get(0).getManager().getName());
 
     }
 
@@ -107,9 +108,9 @@ public class Tests {
         List<CompanyUD> companies = qp.getResultList();
         CompanyUD cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(null, companies.get(0).getManager());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(null, companies.get(0).getManager());
 
         // Add The Boss
         tx = em.getTransaction();
@@ -127,9 +128,9 @@ public class Tests {
         companies = qp.getResultList();
         cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(3, cmp.getEmployees().size());
-        Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+        assertEquals(1, companies.size());
+        assertEquals(3, cmp.getEmployees().size());
+        assertEquals("The Boss", companies.get(0).getManager().getName());
     }
 
     @Test
@@ -163,8 +164,8 @@ public class Tests {
         List<CompanyUDNPK> companies = qp.getResultList();
         CompanyUDNPK cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
 
         EntityTransaction tx2 = em.getTransaction();
         tx2.begin();
@@ -208,9 +209,9 @@ public class Tests {
         List<CompanyEB2> companies = qp.getResultList();
         CompanyEB2 cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(1, cmp.getManagers().size());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(1, cmp.getManagers().size());
     }
 
     @Test
@@ -244,9 +245,9 @@ public class Tests {
         List<CompanyEB> companies = qp.getResultList();
         CompanyEB cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(1, cmp.getManagers().size());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(1, cmp.getManagers().size());
     }
 
     @Test
@@ -283,9 +284,9 @@ public class Tests {
         List<CompanyBD3> companies = qp.getResultList();
         CompanyBD3 cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(1, cmp.getManagers().size());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(1, cmp.getManagers().size());
     }
 
     @Test
@@ -322,9 +323,9 @@ public class Tests {
         List<CompanyBD2> companies = qp.getResultList();
         CompanyBD2 cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(1, cmp.getManagers().size());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(1, cmp.getManagers().size());
     }
 
     @Test
@@ -357,9 +358,9 @@ public class Tests {
         List<CompanyEG> companies = qp.getResultList();
         CompanyEG cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(2, cmp.getEmployees().size());
-        Assert.assertEquals(null, companies.get(0).getManager());
+        assertEquals(1, companies.size());
+        assertEquals(2, cmp.getEmployees().size());
+        assertEquals(null, companies.get(0).getManager());
 
         // Add The Boss
         tx = em.getTransaction();
@@ -377,8 +378,8 @@ public class Tests {
         companies = qp.getResultList();
         cmp = companies.get(0);
 
-        Assert.assertEquals(1, companies.size());
-        Assert.assertEquals(3, cmp.getEmployees().size());
-        Assert.assertEquals("The Boss", companies.get(0).getManager().getName());
+        assertEquals(1, companies.size());
+        assertEquals(3, cmp.getEmployees().size());
+        assertEquals("The Boss", companies.get(0).getManager().getName());
     }
 }
