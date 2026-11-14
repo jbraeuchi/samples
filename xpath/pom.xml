@@ -8,6 +8,23 @@
     <artifactId>xpath</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- 
+        The mockito-junit-jupiter 5.24.0 artifact brings in an older JUnit API, version 5.13.4. 
+        So we also import the junit-bom, which sets one version for all JUnit artifacts and keeps them on 6.1.3. 
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>6.1.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
 
         <dependency>
@@ -24,6 +41,12 @@
 
         <dependency>
             <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.24.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.24.0</version>
             <scope>test</scope>
@@ -32,7 +55,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.13.4</version>
+			<version>6.1.3</version>
 			<scope>test</scope>
 		</dependency>
 
