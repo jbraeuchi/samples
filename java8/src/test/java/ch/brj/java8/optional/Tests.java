@@ -3,7 +3,7 @@ package ch.brj.java8.optional;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author jakob

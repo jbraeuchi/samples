@@ -7,9 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author jakob
@@ -26,8 +25,8 @@ public class Tests {
 //		System.out.println(stream1.count());
 //		System.out.println(stream2.count());
 		
-		Assert.assertTrue(stream1.allMatch(e -> e.startsWith("D")));
-		Assert.assertTrue(stream2.anyMatch(e -> e.startsWith("Do")));
+		assertTrue(stream1.allMatch(e -> e.startsWith("D")));
+		assertTrue(stream2.anyMatch(e -> e.startsWith("Do")));
 	}
 
 	@Test

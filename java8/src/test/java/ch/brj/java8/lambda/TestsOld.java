@@ -1,6 +1,6 @@
 package ch.brj.java8.lambda;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author jakob

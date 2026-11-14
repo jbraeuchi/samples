@@ -1,12 +1,11 @@
 package ch.brj.java8.future;
 
-import org.junit.Test;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by jakob on 02.01.2017.

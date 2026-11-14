@@ -1,6 +1,6 @@
 package ch.brj.java8.intf;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *

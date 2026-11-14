@@ -7,9 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class Tests {
 
@@ -22,8 +21,8 @@ public class Tests {
 		Instant vorgestern = heute.minus(2, ChronoUnit.DAYS);
 		System.out.println(vorgestern);
 		
-		Assert.assertTrue(heute.isAfter(vorgestern));
-		Assert.assertTrue(vorgestern.isBefore(heute));
+		assertTrue(heute.isAfter(vorgestern));
+		assertTrue(vorgestern.isBefore(heute));
 	}
 	
 	@Test
@@ -35,8 +34,8 @@ public class Tests {
 		LocalDate vorgestern = heute.minus(2, ChronoUnit.DAYS);
 		System.out.println(vorgestern);
 
-		Assert.assertTrue(heute.isAfter(vorgestern));
-		Assert.assertTrue(vorgestern.isBefore(heute));		
+		assertTrue(heute.isAfter(vorgestern));
+		assertTrue(vorgestern.isBefore(heute));		
 	}
 
 	@Test
